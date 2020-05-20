@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>AEasy | Aeternity AENS System</title>
+    <!-- base:css -->
+    <link rel="stylesheet" href="../static/../static/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../static/../static/vendors/css/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="../static/css/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="../static/images/favicon.png"/>
+</head>
+
+<body>
+<div class="container-scroller d-flex">
+    <div class="container-fluid page-body-wrapper full-page-wrapper d-flex">
+        <div class="content-wrapper d-flex align-items-center auth px-0">
+            <div class="row w-100 mx-0">
+                <div class="col-lg-4 mx-auto">
+                    <div class="auth-form-light text-left py-5 px-4 px-sm-5">
+
+                        <h4>Generate your mnemonic</h4>
+                        <h6 class="font-weight-light">Generate in to continue.</h6>
+                        <form class="pt-3">
+                            <div class="form-group">
+                                <textarea readonly  class="form-control display-1" style="line-height: 20px" id="mnemonic" rows="3"
+                                          placeholder="mnemonic word"></textarea>
+                            </div>
+
+                            <div class="mt-3">
+                                <a id="generate"
+                                   class="btn btn-block btn-danger btn-lg font-weight-medium auth-form-btn"
+                                   href="#">GENERATE</a>
+                            </div>
+                            <div class="my-2 d-flex justify-content-between align-items-center">
+
+                            </div>
+
+                            <div class="text-center mt-4 font-weight-light">
+                                Did I generate it? <a href="/login" class="text-primary">Login</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- content-wrapper ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
+<!-- base:js -->
+<script src="../static/vendors/js/vendor.bundle.base.js"></script>
+<!-- endinject -->
+<!-- inject:js -->
+<script src="../static/js/off-canvas.js"></script>
+<script src="../static/js/hoverable-collapse.js"></script>
+<script src="../static/js/template.js"></script>
+<script src="../static/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="../static/js/sweetalert.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+
+<!-- endinject -->
+</body>
+
+<script>
+
+    $('#generate').on('click', function () {
+        $("#generate").text(" ");
+        $("#generate").LoadingOverlay("show", {
+            background: "",
+            imageColor: "#FFFFFF"
+        });
+        $.post("/api/register", {}, function (result) {
+            $("#generate").text("GENERATE");
+            $("#generate").LoadingOverlay("hide");
+            let obj = jQuery.parseJSON(result);
+            if (obj.code === 200) {
+                $("#mnemonic").text(obj.data.mnemonic);
+            } else {
+                swal(obj.msg);
+            }
+        });
+    });
+
+</script>
+
+</html>

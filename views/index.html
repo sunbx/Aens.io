@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>AEasy Names | Aeternity AENS System </title>
+    <!-- base:css -->
+    <link rel="stylesheet" href="../static/../static/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../static/vendors/css/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="../static/css/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="../static/images/favicon.png"/>
+</head>
+<body>
+<div class="container-scroller d-flex">
+    <!-- partial:./partials/_sidebar.html -->
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+            <li class="nav-item sidebar-category">
+                <p>Navigation</p>
+                <span></span>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/">
+                    <i class="mdi mdi-view-quilt menu-icon"></i>
+                    <span class="menu-title">Home</span>
+
+                </a>
+            </li>
+            <li class="nav-item sidebar-category">
+                <p>AENS</p>
+                <span></span>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false"
+                   aria-controls="ui-basic">
+                    <i class="mdi mdi-palette menu-icon"></i>
+                    <span class="menu-title">My Names</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse show" id="ui-basic">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/my/register">In the register</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/my/over">The registered</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/auction">
+                    <i class="mdi mdi-view-headline menu-icon"></i>
+                    <span class="menu-title">Auction</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/price">
+                    <i class="mdi mdi-chart-pie menu-icon"></i>
+                    <span class="menu-title">Auction Price</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/expire">
+                    <i class="mdi mdi-grid-large menu-icon"></i>
+                    <span class="menu-title">Will expire</span>
+                </a>
+            </li>
+            <li class="nav-item sidebar-category">
+                <p>partners</p>
+                <span></span>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" target="_blank" href="https://aeasy.io">
+                    <i class="mdi mdi-puzzle menu-icon"></i>
+                    <span class="menu-title">Aeasy</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" target="_blank" href="https://aeknow.org">
+                    <i class="mdi mdi-chart-arc menu-icon"></i>
+                    <span class="menu-title">AeKnow</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" target="_blank" href="https://wetrue.io">
+                    <i class="mdi mdi-file-cloud menu-icon"></i>
+                    <span class="menu-title">WeTrue</span>
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+
+    <link rel="import" href="sidebar.html" id="page1"/>
+
+    <!-- partial -->
+    <div id="partial" class="container-fluid page-body-wrapper">
+        <!-- partial:./partials/_navbar.html -->
+        <nav class="navbar col-lg-12 col-12 px-0 py-0 py-lg-9 d-flex flex-row">
+            <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+                <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+                    <span class="mdi mdi-menu"></span>
+                </button>
+                <div class="navbar-brand-wrapper">
+
+                </div>
+                <h4 class="font-weight-bold mb-0 d-md-block mt-1" style="margin-left: 20px;">Aeternity AENS System</h4>
+                <ul class="navbar-nav navbar-nav-right">
+                    <li class="nav-item">
+                        <h4 class="mb-0 font-weight-bold d-none d-xl-block" id="date_time"></h4>
+                    </li>
+
+                </ul>
+                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+                        data-toggle="offcanvas">
+                    <span class="mdi mdi-menu"></span>
+                </button>
+            </div>
+            <div class="navbar-menu-wrapper navbar-search-wrapper d-none d-lg-flex align-items-center">
+                <ul class="navbar-nav mr-lg-2">
+                    <li class="nav-item nav-search d-none d-lg-block">
+                        <div class="input-group">
+                            <input type="text" id="name" class="form-control" style="width: 100%"
+                                   placeholder="Search AENS names..."
+                                   aria-label="search" aria-describedby="search">
+                        </div>
+
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav navbar-nav-right">
+                    <button type="button" id="claim" class="btn btn-primary  btn-fw "
+                            style="width: 150px; margin: 10px">Search
+                    </button>
+                    <li class="nav-item nav-profile dropdown">
+                        <a class="nav-link dropdown-toggle" href="../static/#" data-toggle="dropdown"
+                           id="profileDropdown">
+                            <div id="identicon" lang="">
+                                <svg data-jdenticon-value="{{.address}}" width="30" height="30">
+                                </svg>
+                            </div>
+                            <span class="nav-profile-name">{{.address}}</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
+                             aria-labelledby="profileDropdown">
+
+                            <a href="/create" class="dropdown-item">
+                                <i class="mdi mdi-logout"></i>
+                                Add Names
+                            </a>
+                            <a href="/login/logout" class="dropdown-item">
+                                <i class="mdi mdi-logout"></i>
+                                {{.login_text}}
+                            </a>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+        <!-- partial -->
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-12 col-xl-12 grid-margin stretch-card">
+                        <div class="row w-100 flex-grow">
+                            <div class="col-md-12 grid-margin stretch-card">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p class="card-title">Overall data graph of AENS</p>
+                                        <p class="text-muted">Recently, names have performed as follows</p>
+                                        <div class="row mb-3">
+                                            <div class="col-md-7">
+                                                <div class="d-flex justify-content-between traffic-status">
+                                                    <div class="item">
+                                                        <p class="mb-">Users</p>
+                                                        <h5 class="font-weight-bold mb-0">{{.count}}</h5>
+                                                        <div class="color-border"></div>
+                                                    </div>
+                                                    <div class="item">
+                                                        <p class="mb-">Banlance (ae)</p>
+                                                        <h5 class="font-weight-bold mb-0">{{.sum_price}}</h5>
+                                                        <div class="color-border"></div>
+                                                    </div>
+                                                    <div class="item">
+                                                        <p class="mb-">Names count</p>
+                                                        <h5 class="font-weight-bold mb-0">{{.sum}}</h5>
+                                                        <div class="color-border"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <ul class="nav nav-pills nav-pills-custom justify-content-md-end"
+                                                    id="pills-tab-custom"
+                                                    role="tablist">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link active" id="pills-home-tab-custom"
+                                                           data-toggle="pill"
+                                                           href="../static/#pills-health" role="tab"
+                                                           aria-controls="pills-home" aria-selected="true">
+                                                            Basic data
+                                                        </a>
+
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-12 col-xl-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Domain name fortune list</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                Ranking
+                                            </th>
+                                            <th>
+
+                                            </th>
+                                            <th>
+                                                Address
+                                            </th>
+
+                                            <th>
+                                                Amount(ae)
+                                            </th>
+                                            <th>
+                                                Name Count
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {{range $key, $val := .ranking}}
+
+                                            <tr>
+                                                <td>
+                                                    {{$val.Id}}
+                                                </td>
+                                                <td class="py-1">
+                                                    <div id="identicon" lang="">
+                                                        <svg data-jdenticon-value="{{$val.Owner}}" width="30"
+                                                             height="30">
+                                                        </svg>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    {{$val.Owner}}
+                                                </td>
+
+                                                <td>
+                                                    {{$val.SumPrice}}
+                                                </td>
+                                                <td>
+                                                    {{$val.NameNum}}
+                                                </td>
+                                            </tr>
+                                        {{end}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- row end -->
+            <footer class="footer">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-sm-flex justify-content-center justify-content-sm-between py-2">
+                            <p class="text-center text-sm-left d-block d-sm-inline-block mb-0">Copyright © 2020 Urbanui.
+                                All rights reserved.</p>
+                            <p class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mb-0"> Content from <a
+                                        href="../static/https://aeasy.io" target="_blank" title="">AEasy</a> <a
+                                        href="../static/" title="" target="_blank"></a></p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <!-- row end -->
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:./partials/_footer.html -->
+
+        <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+</div>
+<!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
+
+<!-- base:js -->
+<script src="../static/vendors/js/vendor.bundle.base.js"></script>
+<!-- endinject -->
+<!-- Plugin js for this page-->
+<script src="../static/vendors/chart.js/Chart.min.js"></script>
+<!-- End plugin js for this page-->
+<!-- inject:js -->
+<script src="../static/js/off-canvas.js"></script>
+<script src="../static/js/hoverable-collapse.js"></script>
+<script src="../static/js/template.js"></script>
+<!-- endinject -->
+<!-- plugin js for this page -->
+<!-- End plugin js for this page -->
+<!-- Custom js for this page-->
+<script src="../static/js/dashboard.js"></script>
+<!-- End custom js for this page-->
+<script src="https://cdn.jsdelivr.net/npm/jdenticon@2.2.0"></script>
+
+<script src="../static/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="../static/js/sweetalert.min.js"></script>
+<script type="text/javascript" src="https://wetrue.io/assets/scripts/aepp-sdk.browser-script-721.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+
+</body>
+
+<script>
+    $("#claim").click(function () {
+
+        let name = $("#name").val();
+        if (!name.endWith(".chain")) {
+            swal("Please keep  .chain at the end");
+            return;
+        }
+
+        if (name.length <= 6) {
+            swal("Please enter normal domain name");
+            return;
+        }
+
+
+        $("#claim").text(" ");
+        $("#claim").LoadingOverlay("show", {
+            background: "",
+            imageColor: "#FFFFFF"
+        });
+        $.post("/api/name/info", {
+            name: name,
+        }, function (result) {
+            $("#claim").text("Search");
+            $("#claim").LoadingOverlay("hide");
+            let obj = jQuery.parseJSON(result);
+            if (obj.code === 200) {
+                window.location.href = "/detail?name=" + name;
+            } else {
+                swal({
+                    title: "Are you sure?",
+                    text: "The current domain name is not registered," +
+                        "Do you want to register  the domain name?!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        window.location.href = "/create?name=" + name;
+                        return;
+                    });
+            }
+        });
+    });
+
+    String.prototype.endWith = function (endStr) {
+        var d = this.length - endStr.length;
+        return (d >= 0 && this.lastIndexOf(endStr) == d)
+    };
+
+</script>
+
+</html>
