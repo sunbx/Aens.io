@@ -109,17 +109,20 @@
             $("#login").LoadingOverlay("hide");
             let obj = jQuery.parseJSON(result);
             if (obj.code === 200) {
-                wordKeyToIsKs("aens", obj.data.signingKey);
-                // let key = keyStoreToSecretKey("aens");
-                window.location.href = "/";
-                // key.then(function (result) {
-                //    alert(result)
-                // })
+                swal({{i18n .Lang "Please set your temporary password"}}, {
+                    content: "input",
+                }).then((password) => {
+                    wordKeyToIsKs(password, obj.data.signingKey);
+                    window.location.href = "/";
+                });
             } else {
                 swal(obj.msg);
             }
         });
     });
+
+
+
 
     function wordKeyToIsKs(password, secretKey) {
         Ae.Keystore.dump("AENS", password, secretKey).then(Keystore => {

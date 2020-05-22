@@ -78,19 +78,19 @@
                 <span></span>
             </li>
             <li class="nav-item">
-                <a class="nav-link" target="_blank" href="https://aeasy.io">
+                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="https://aeasy.io">
                     <i class="mdi mdi-puzzle menu-icon"></i>
                     <span class="menu-title">{{i18n .Lang "Aeasy"}}</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" target="_blank" href="https://aeknow.org">
+                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="https://aeknow.org">
                     <i class="mdi mdi-chart-arc menu-icon"></i>
                     <span class="menu-title">{{i18n .Lang "AeKnow"}}</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" target="_blank" href="https://wetrue.io">
+                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="https://wetrue.io">
                     <i class="mdi mdi-file-cloud menu-icon"></i>
                     <span class="menu-title">{{i18n .Lang "WeTrue"}}</span>
                 </a>
@@ -112,7 +112,8 @@
                 <div class="navbar-brand-wrapper">
 
                 </div>
-                <h4 class="font-weight-bold mb-0  d-md-block mt-1" style="margin-left: 20px;">{{i18n .Lang "Aeternity AENS System"}}</h4>
+                <h4 class="font-weight-bold mb-0  d-md-block mt-1"
+                    style="margin-left: 20px;">{{i18n .Lang "Aeternity AENS System"}}</h4>
                 <ul class="navbar-nav navbar-nav-right">
                     <li class="nav-item">
                         <h4 class="mb-0 font-weight-bold d-none d-xl-block" id="date_time"></h4>
@@ -195,7 +196,8 @@
                     <div class="col-md-4 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body" style="margin: 0 auto">
-                                <h4 class="card-title" style="text-align: center">{{i18n .Lang "Sweep yards top-up"}}</h4>
+                                <h4 class="card-title"
+                                    style="text-align: center">{{i18n .Lang "Sweep yards top-up"}}</h4>
                                 <div class="code" style="margin: auto 0;text-align: center;margin-top: 20px">
                                     <div id="qrcode" class="qrcode"></div>
                                 </div>
@@ -296,37 +298,40 @@
                 }
                 swal({
                     title: {{i18n .Lang "Are you sure?"}},
-                    text: {{i18n .Lang "Currently the domain name has been registered are you willing to pay"}} + FloatAdd(obj.data.current_price, obj.data.current_price * 0.05) + {{i18n .Lang "ae for bidding?!"}},
+                    text: {{i18n .Lang "Currently the domain name has been registered are you willing to pay"}} +FloatAdd(obj.data.current_price, obj.data.current_price * 0.05) + {{i18n .Lang "ae for bidding?!"}},
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,
                 })
                     .then((willDelete) => {
                         if (willDelete) {
-                            $("#claim").text(" ");
-                            $("#claim").LoadingOverlay("show", {
-                                background: "",
-                                imageColor: "#FFFFFF"
-                            });
-
-                            let key = keyStoreToSecretKey("aens");
-
-                            key.then(function (signingKey) {
-                                $.post("/api/name/add", {
-                                    name: name,
-                                    signingKey: signingKey,
-                                }, function (result) {
-                                    $("#claim").text("CLAIM");
-                                    $("#claim").LoadingOverlay("hide");
-                                    let obj = jQuery.parseJSON(result);
-                                    if (obj.code === 200) {
-                                        swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
-                                        $("#name").val("")
-                                    } else {
-                                        swal(obj.msg);
-                                    }
+                            swal({{i18n .Lang "Enter your temporary password"}}, {
+                                content: "input",
+                            }).then((password) => {
+                                let key = keyStoreToSecretKey(password);
+                                key.then(function (signingKey) {
+                                    $("#claim").text(" ");
+                                    $("#claim").LoadingOverlay("show", {
+                                        background: "",
+                                        imageColor: "#FFFFFF"
+                                    });
+                                    $.post("/api/name/add", {
+                                        name: name,
+                                        signingKey: signingKey,
+                                    }, function (result) {
+                                        $("#claim").text("CLAIM");
+                                        $("#claim").LoadingOverlay("hide");
+                                        let obj = jQuery.parseJSON(result);
+                                        if (obj.code === 200) {
+                                            swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
+                                            $("#name").val("")
+                                        } else {
+                                            swal(obj.msg);
+                                        }
+                                    });
+                                }).catch(function (e) {
+                                    swal("Password Error");
                                 });
-
                             });
 
                         } else {
@@ -344,30 +349,34 @@
                 })
                     .then((willDelete) => {
                         if (willDelete) {
-                            $("#claim").text(" ");
-                            $("#claim").LoadingOverlay("show", {
-                                background: "",
-                                imageColor: "#FFFFFF"
-                            });
+                            swal({{i18n .Lang "Enter your temporary password"}}, {
+                                content: "input",
+                            }).then((password) => {
+                                let key = keyStoreToSecretKey(password);
 
-                            let key = keyStoreToSecretKey("aens");
-
-                            key.then(function (signingKey) {
-                                $.post("/api/name/add", {
-                                    name: name,
-                                    signingKey: signingKey,
-                                }, function (result) {
-                                    $("#claim").text({{i18n .Lang "CLAIM"}});
-                                    $("#claim").LoadingOverlay("hide");
-                                    let obj = jQuery.parseJSON(result);
-                                    if (obj.code === 200) {
-                                        swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
-                                        $("#name").val("")
-                                    } else {
-                                        swal(obj.msg);
-                                    }
+                                key.then(function (signingKey) {
+                                    $("#claim").text(" ");
+                                    $("#claim").LoadingOverlay("show", {
+                                        background: "",
+                                        imageColor: "#FFFFFF"
+                                    });
+                                    $.post("/api/name/add", {
+                                        name: name,
+                                        signingKey: signingKey,
+                                    }, function (result) {
+                                        $("#claim").text({{i18n .Lang "CLAIM"}});
+                                        $("#claim").LoadingOverlay("hide");
+                                        let obj = jQuery.parseJSON(result);
+                                        if (obj.code === 200) {
+                                            swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
+                                            $("#name").val("")
+                                        } else {
+                                            swal(obj.msg);
+                                        }
+                                    });
+                                }).catch(function (e) {
+                                    swal("Password Error");
                                 });
-
                             });
 
                         } else {

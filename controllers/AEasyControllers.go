@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 type ApiLoginController struct {
@@ -68,6 +69,8 @@ type LoginData struct {
 
 func (c *ApiLoginController) Post() {
 	mnemonic := c.GetString("mnemonic")
+	mnemonic = strings.Trim(mnemonic," ")
+	mnemonic = strings.Replace(mnemonic, "\n", "", -1)
 	index := c.GetString("index")
 	resp, err := http.PostForm("https://aeasy.io/api/user/login",
 		url.Values{

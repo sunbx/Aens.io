@@ -78,24 +78,33 @@
                 <span></span>
             </li>
             <li class="nav-item">
-                <a class="nav-link" target="_blank" href="https://aeasy.io">
+                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="https://aeasy.io">
                     <i class="mdi mdi-puzzle menu-icon"></i>
                     <span class="menu-title">{{i18n .Lang "Aeasy"}}</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" target="_blank" href="https://aeknow.org">
+                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="https://aeknow.org">
                     <i class="mdi mdi-chart-arc menu-icon"></i>
                     <span class="menu-title">{{i18n .Lang "AeKnow"}}</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" target="_blank" href="https://wetrue.io">
+                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="https://wetrue.io">
                     <i class="mdi mdi-file-cloud menu-icon"></i>
                     <span class="menu-title">{{i18n .Lang "WeTrue"}}</span>
                 </a>
             </li>
-
+            <li class="nav-item sidebar-category">
+                <p>{{i18n .Lang "CHAGNE LANGUAGE"}}</p>
+                <span></span>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"  href="/language">
+                    <i class="mdi mdi-puzzle menu-icon"></i>
+                    <span class="menu-title">{{i18n .Lang "language"}}</span>
+                </a>
+            </li>
         </ul>
     </nav>
     <!-- partial -->
@@ -112,7 +121,8 @@
                 <div class="navbar-brand-wrapper">
 
                 </div>
-                <h4 class="font-weight-bold mb-0  d-md-block mt-1" style="margin-left: 20px;">{{i18n .Lang "Aeternity AENS System"}}</h4>
+                <h4 class="font-weight-bold mb-0  d-md-block mt-1"
+                    style="margin-left: 20px;">{{i18n .Lang "Aeternity AENS System"}}</h4>
                 <ul class="navbar-nav navbar-nav-right">
                     <li class="nav-item">
                         <h4 class="mb-0 font-weight-bold d-none d-xl-block" id="date_time"></h4>
@@ -339,25 +349,35 @@
 
 
     $("#update").click(function () {
-        $("#update").text(" ");
-        $("#update").LoadingOverlay("show", {
-            background: "",
-            imageColor: "#FFFFFF"
+
+
+        swal({{i18n .Lang "Enter your temporary password"}}, {
+            content: "input",
+        }).then((password) => {
+            let key = keyStoreToSecretKey(password);
+            key.then(function (signingKey) {
+                $("#update").text(" ");
+                $("#update").LoadingOverlay("show", {
+                    background: "",
+                    imageColor: "#FFFFFF"
+                });
+                $.post("/api/name/update", {name: {{.nameInfo.Name}}, signingKey: signingKey}, function (result) {
+                    $("#update").text({{i18n .Lang "UPDATE"}});
+                    $("#update").LoadingOverlay("hide");
+                    let obj = jQuery.parseJSON(result);
+                    if (obj.code === 200) {
+                        swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
+                    } else {
+                        swal(obj.msg);
+                    }
+                });
+            }).catch(function (e) {
+                swal("Password Error");
+            });
+
         });
 
-        let key = keyStoreToSecretKey("aens");
-        key.then(function (signingKey) {
-            $.post("/api/name/update", {name: {{.nameInfo.Name}}, signingKey: signingKey}, function (result) {
-                $("#update").text({{i18n .Lang "UPDATE"}});
-                $("#update").LoadingOverlay("hide");
-                let obj = jQuery.parseJSON(result);
-                if (obj.code === 200) {
-                    swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
-                } else {
-                    swal(obj.msg);
-                }
-            });
-        });
+
     });
 
     $("#transfer").click(function () {
@@ -365,31 +385,38 @@
             content: "input",
         })
             .then((recipientAddress) => {
+                swal({{i18n .Lang "Enter your temporary password"}}, {
+                    content: "input",
+                }).then((password) => {
+                    let key = keyStoreToSecretKey(password);
 
-                $("#transfer").text(" ");
-                $("#transfer").LoadingOverlay("show", {
-                    background: "",
-                    imageColor: "#FFFFFF"
-                });
-
-                let key = keyStoreToSecretKey("aens");
-
-                key.then(function (signingKey) {
-                    $.post("/api/name/transfer", {
-                        name: {{.nameInfo.Name}},
-                        signingKey: signingKey,
-                        recipientAddress: recipientAddress
-                    }, function (result) {
-                        $("#transfer").text("TRANSFER");
-                        $("#transfer").LoadingOverlay("hide");
-                        let obj = jQuery.parseJSON(result);
-                        if (obj.code === 200) {
-                            swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
-                        } else {
-                            swal(obj.msg);
-                        }
+                    key.then(function (signingKey) {
+                        $("#transfer").text(" ");
+                        $("#transfer").LoadingOverlay("show", {
+                            background: "",
+                            imageColor: "#FFFFFF"
+                        });
+                        $.post("/api/name/transfer", {
+                            name: {{.nameInfo.Name}},
+                            signingKey: signingKey,
+                            recipientAddress: recipientAddress
+                        }, function (result) {
+                            $("#transfer").text("TRANSFER");
+                            $("#transfer").LoadingOverlay("hide");
+                            let obj = jQuery.parseJSON(result);
+                            if (obj.code === 200) {
+                                swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
+                            } else {
+                                swal(obj.msg);
+                            }
+                        });
+                    }).catch(function (e) {
+                        swal("Password Error");
                     });
+
                 });
+
+
             });
     });
 
@@ -399,34 +426,39 @@
         nameFee = FloatAdd(nameFee, nameFee * 0.05);
         swal({
             title: {{i18n .Lang "Are you sure"}}+"?",
-            text:{{i18n .Lang "Are you sure about a markup of"}}+ nameFee + {{i18n .Lang "of the current price"}}+" ?!",
+            text: {{i18n .Lang "Are you sure about a markup of"}}+nameFee + {{i18n .Lang "of the current price"}}+" ?!",
             icon: "warning",
             buttons: true,
             dangerMode: true,
         })
             .then((willDelete) => {
                 if (willDelete) {
-                    $("#claim").text(" ");
-                    $("#claim").LoadingOverlay("show", {
-                        background: "",
-                        imageColor: "#FFFFFF"
-                    });
 
-                    let key = keyStoreToSecretKey("aens");
-
-                    key.then(function (signingKey) {
-                        $.post("/api/name/add", {
-                            name: {{.nameInfo.Name}},
-                            signingKey: signingKey,
-                        }, function (result) {
-                            $("#claim").text({{i18n .Lang "CLAIM"}});
-                            $("#claim").LoadingOverlay("hide");
-                            let obj = jQuery.parseJSON(result);
-                            if (obj.code === 200) {
-                                swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
-                            } else {
-                                swal(obj.msg);
-                            }
+                    swal({{i18n .Lang "Enter your temporary password"}}, {
+                        content: "input",
+                    }).then((password) => {
+                        let key = keyStoreToSecretKey(password);
+                        key.then(function (signingKey) {
+                            $("#claim").text(" ");
+                            $("#claim").LoadingOverlay("show", {
+                                background: "",
+                                imageColor: "#FFFFFF"
+                            });
+                            $.post("/api/name/add", {
+                                name: {{.nameInfo.Name}},
+                                signingKey: signingKey,
+                            }, function (result) {
+                                $("#claim").text({{i18n .Lang "CLAIM"}});
+                                $("#claim").LoadingOverlay("hide");
+                                let obj = jQuery.parseJSON(result);
+                                if (obj.code === 200) {
+                                    swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
+                                } else {
+                                    swal(obj.msg);
+                                }
+                            });
+                        }).catch(function (e) {
+                            swal("Password Error");
                         });
                     });
 
