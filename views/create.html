@@ -25,13 +25,13 @@
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
             <li class="nav-item sidebar-category">
-                <p>Navigation</p>
+                <p>{{i18n .Lang "Navigation"}}</p>
                 <span></span>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/">
                     <i class="mdi mdi-view-quilt menu-icon"></i>
-                    <span class="menu-title">Home</span>
+                    <span class="menu-title">{{i18n .Lang "Home"}}</span>
 
                 </a>
             </li>
@@ -43,55 +43,56 @@
                 <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false"
                    aria-controls="ui-basic">
                     <i class="mdi mdi-palette menu-icon"></i>
-                    <span class="menu-title">My Names</span>
+                    <span class="menu-title">{{i18n .Lang "My Names"}}</span>
                     <i class="menu-arrow"></i>
                 </a>
                 <div class="collapse show" id="ui-basic">
                     <ul class="nav flex-column sub-menu">
                         <li class="nav-item">
-                            <a class="nav-link" href="/my/register">In the register</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/my/over">The registered</a></li>
+                            <a class="nav-link" href="/my/register">{{i18n .Lang "In the register"}}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/my/over">{{i18n .Lang "The registered"}}</a>
+                        </li>
                     </ul>
                 </div>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/auction">
                     <i class="mdi mdi-view-headline menu-icon"></i>
-                    <span class="menu-title">Auction</span>
+                    <span class="menu-title">{{i18n .Lang "Auction"}}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/price">
                     <i class="mdi mdi-chart-pie menu-icon"></i>
-                    <span class="menu-title">Auction Price</span>
+                    <span class="menu-title">{{i18n .Lang "Auction Price"}}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/expire">
                     <i class="mdi mdi-grid-large menu-icon"></i>
-                    <span class="menu-title">Will expire</span>
+                    <span class="menu-title">{{i18n .Lang "Will expire"}}</span>
                 </a>
             </li>
             <li class="nav-item sidebar-category">
-                <p>partners</p>
+                <p>{{i18n .Lang "partners"}}</p>
                 <span></span>
             </li>
             <li class="nav-item">
                 <a class="nav-link" target="_blank" href="https://aeasy.io">
                     <i class="mdi mdi-puzzle menu-icon"></i>
-                    <span class="menu-title">Aeasy</span>
+                    <span class="menu-title">{{i18n .Lang "Aeasy"}}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" target="_blank" href="https://aeknow.org">
                     <i class="mdi mdi-chart-arc menu-icon"></i>
-                    <span class="menu-title">AeKnow</span>
+                    <span class="menu-title">{{i18n .Lang "AeKnow"}}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" target="_blank" href="https://wetrue.io">
                     <i class="mdi mdi-file-cloud menu-icon"></i>
-                    <span class="menu-title">WeTrue</span>
+                    <span class="menu-title">{{i18n .Lang "WeTrue"}}</span>
                 </a>
             </li>
 
@@ -111,7 +112,7 @@
                 <div class="navbar-brand-wrapper">
 
                 </div>
-                <h4 class="font-weight-bold mb-0  d-md-block mt-1" style="margin-left: 20px;">Aeternity ANES System</h4>
+                <h4 class="font-weight-bold mb-0  d-md-block mt-1" style="margin-left: 20px;">{{i18n .Lang "Aeternity AENS System"}}</h4>
                 <ul class="navbar-nav navbar-nav-right">
                     <li class="nav-item">
                         <h4 class="mb-0 font-weight-bold d-none d-xl-block" id="date_time"></h4>
@@ -133,19 +134,19 @@
                     <div class="col-md-8 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Get your first aens domain name</h4>
+                                <h4 class="card-title">{{i18n .Lang "Get your first aens domain name"}}</h4>
                                 <p class="card-description">
-                                    Please end your domain name with .chain
+                                    {{i18n .Lang "Please end your domain name with chain"}}
                                 </p>
                                 <form class="forms-sample">
                                     <div class="form-group">
-                                        <label for="exampleInputUsername1">Names</label>
+                                        <label for="exampleInputUsername1">{{i18n .Lang "Name"}}</label>
                                         <input type="text" class="form-control" id="name"
-                                               placeholder="The sample :  yani.chain" value="{{.name}}">
+                                               placeholder={{i18n .Lang "The sample"}} value="{{.name}}">
                                     </div>
 
                                     <button type="button" id="claim" class="btn btn-primary btn-rounded btn-fw"
-                                            style="width: 150px;height: 45px;">CLAIM
+                                            style="width: 150px;height: 45px;">{{i18n .Lang "CLAIM"}}
                                     </button>
 
                                 </form>
@@ -157,14 +158,15 @@
                     <div class="col-md-4 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">What can a domain name do</h4>
+                                <h4 class="card-title">{{i18n .Lang "What can a domain name do"}}</h4>
 
                                 <ul class="list-star">
-                                    <li>Forget the traditional address</li>
-                                    <li>You can bind anyone's address</li>
-                                    <li>Niubi domain name, meet your identity</li>
-                                    <li>Has the super big appreciation space</li>
-                                    <li>There will be decentralized websites in the future</li>
+                                    <li>{{i18n .Lang "Forget the traditional address"}}</li>
+                                    <li>{{i18n .Lang "You can bind anyone's address"}}</li>
+                                    <li>{{i18n .Lang "Niubi domain name, meet your identity"}}</li>
+                                    <li>{{i18n .Lang "Has the super big appreciation space"}}</li>
+                                    <li>{{i18n .Lang "There will be decentralized websites in the future"}}</li>
+                                    <li>...</li>
                                 </ul>
                             </div>
                         </div>
@@ -177,11 +179,11 @@
                         <div class="card">
                             <div class="card-body" style="text-align:left">
                                 <blockquote class="blockquote">
-                                    <h1 class="mt-2 display-4">Current ae balance</h1>
+                                    <h1 class="mt-2 display-4">{{i18n .Lang "Current ae balance"}}</h1>
 
                                     <h1 class="display-2">{{.balance}} AE</h1>
 
-                                    <p class="mb-0 display-4">address </p>
+                                    <p class="mb-0 display-4">{{i18n .Lang "address"}} </p>
                                     <p class="mb-0 mt-3 display-5">
                                         {{.address}} </p>
                                 </blockquote>
@@ -193,7 +195,7 @@
                     <div class="col-md-4 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body" style="margin: 0 auto">
-                                <h4 class="card-title" style="text-align: center">Sweep yards top-up</h4>
+                                <h4 class="card-title" style="text-align: center">{{i18n .Lang "Sweep yards top-up"}}</h4>
                                 <div class="code" style="margin: auto 0;text-align: center;margin-top: 20px">
                                     <div id="qrcode" class="qrcode"></div>
                                 </div>
@@ -264,7 +266,7 @@
         foreground: "#311B58",
         background: "#FFF",
         width: 200, height: 200,
-        text: "{{.address}}"
+        text: {{.address}}
     });
 
     $("#claim").click(function () {
@@ -272,7 +274,7 @@
         let name = $("#name").val();
 
         if (!name.endWith(".chain")) {
-            swal("Please keep  .chain at the end");
+            swal({{i18n .Lang "Please keep chain at the end"}});
             return;
         }
 
@@ -284,17 +286,17 @@
         $.post("/api/name/info", {
             name: name,
         }, function (result) {
-            $("#claim").text("CLAIM");
+            $("#claim").text({{i18n .Lang "CLAIM"}});
             $("#claim").LoadingOverlay("hide");
             let obj = jQuery.parseJSON(result);
             if (obj.code === 200) {
                 if (obj.data.current_height > obj.data.end_height) {
-                    swal("The domain name has been registered, please select another domain name");
+                    swal({{i18n .Lang "The domain name has been registered, please select another domain name"}});
                     return;
                 }
                 swal({
-                    title: "Are you sure?",
-                    text: "Currently the domain name has been registered, are you willing to pay " + FloatAdd(obj.data.current_price, obj.data.current_price * 0.05) + " ae for bidding?!",
+                    title: {{i18n .Lang "Are you sure?"}},
+                    text: {{i18n .Lang "Currently the domain name has been registered are you willing to pay"}} + FloatAdd(obj.data.current_price, obj.data.current_price * 0.05) + {{i18n .Lang "ae for bidding?!"}},
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,
@@ -318,7 +320,7 @@
                                     $("#claim").LoadingOverlay("hide");
                                     let obj = jQuery.parseJSON(result);
                                     if (obj.code === 200) {
-                                        swal("Broadcast Sucess!", "please refresh after 5 minutes!", "success");
+                                        swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
                                         $("#name").val("")
                                     } else {
                                         swal(obj.msg);
@@ -334,8 +336,8 @@
 
             } else {
                 swal({
-                    title: "Are you sure?",
-                    text: "Do you want to register  the domain name?!",
+                    title: {{i18n .Lang "Are you sure?"}},
+                    text: {{i18n .Lang "Do you want to register  the domain name?!"}},
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,
@@ -355,11 +357,11 @@
                                     name: name,
                                     signingKey: signingKey,
                                 }, function (result) {
-                                    $("#claim").text("CLAIM");
+                                    $("#claim").text({{i18n .Lang "CLAIM"}});
                                     $("#claim").LoadingOverlay("hide");
                                     let obj = jQuery.parseJSON(result);
                                     if (obj.code === 200) {
-                                        swal("Broadcast Sucess!", "please refresh after 5 minutes!", "success");
+                                        swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
                                         $("#name").val("")
                                     } else {
                                         swal(obj.msg);

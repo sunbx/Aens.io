@@ -8,6 +8,9 @@ import (
 func init() {
 	beego.Router("/", &controllers.HomeController{})
 
+	//切换语言
+	beego.Router("/language", &controllers.LanguageController{})
+
 	beego.Router("/register", &controllers.RegisterController{})
 
 	beego.Router("/login", &controllers.LoginController{})

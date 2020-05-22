@@ -5,10 +5,23 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/cache"
 	"time"
+	"github.com/beego/i18n"
 )
 
 type BaseController struct {
+	i18n.Locale
 	beego.Controller
+}
+
+func (this *BaseController) Prepare() {
+	var languageCookie = this.Ctx.GetCookie("language")
+	this.Lang = "en-US"
+	if languageCookie == "zh-CN" {
+		this.Lang = "zh-CN"
+	} else {
+		this.Lang = "en-US"
+	}
+	this.Data["Lang"] = this.Lang
 }
 
 type ReturnMsg struct {

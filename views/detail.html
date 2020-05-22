@@ -25,13 +25,13 @@
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
             <li class="nav-item sidebar-category">
-                <p>Navigation</p>
+                <p>{{i18n .Lang "Navigation"}}</p>
                 <span></span>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/">
                     <i class="mdi mdi-view-quilt menu-icon"></i>
-                    <span class="menu-title">Home</span>
+                    <span class="menu-title">{{i18n .Lang "Home"}}</span>
 
                 </a>
             </li>
@@ -43,55 +43,56 @@
                 <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false"
                    aria-controls="ui-basic">
                     <i class="mdi mdi-palette menu-icon"></i>
-                    <span class="menu-title">My Names</span>
+                    <span class="menu-title">{{i18n .Lang "My Names"}}</span>
                     <i class="menu-arrow"></i>
                 </a>
                 <div class="collapse show" id="ui-basic">
                     <ul class="nav flex-column sub-menu">
                         <li class="nav-item">
-                            <a class="nav-link" href="/my/register">In the register</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/my/over">The registered</a></li>
+                            <a class="nav-link" href="/my/register">{{i18n .Lang "In the register"}}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/my/over">{{i18n .Lang "The registered"}}</a>
+                        </li>
                     </ul>
                 </div>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/auction">
                     <i class="mdi mdi-view-headline menu-icon"></i>
-                    <span class="menu-title">Auction</span>
+                    <span class="menu-title">{{i18n .Lang "Auction"}}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/price">
                     <i class="mdi mdi-chart-pie menu-icon"></i>
-                    <span class="menu-title">Auction Price</span>
+                    <span class="menu-title">{{i18n .Lang "Auction Price"}}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/expire">
                     <i class="mdi mdi-grid-large menu-icon"></i>
-                    <span class="menu-title">Will expire</span>
+                    <span class="menu-title">{{i18n .Lang "Will expire"}}</span>
                 </a>
             </li>
             <li class="nav-item sidebar-category">
-                <p>partners</p>
+                <p>{{i18n .Lang "partners"}}</p>
                 <span></span>
             </li>
             <li class="nav-item">
                 <a class="nav-link" target="_blank" href="https://aeasy.io">
                     <i class="mdi mdi-puzzle menu-icon"></i>
-                    <span class="menu-title">Aeasy</span>
+                    <span class="menu-title">{{i18n .Lang "Aeasy"}}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" target="_blank" href="https://aeknow.org">
                     <i class="mdi mdi-chart-arc menu-icon"></i>
-                    <span class="menu-title">AeKnow</span>
+                    <span class="menu-title">{{i18n .Lang "AeKnow"}}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" target="_blank" href="https://wetrue.io">
                     <i class="mdi mdi-file-cloud menu-icon"></i>
-                    <span class="menu-title">WeTrue</span>
+                    <span class="menu-title">{{i18n .Lang "WeTrue"}}</span>
                 </a>
             </li>
 
@@ -111,7 +112,7 @@
                 <div class="navbar-brand-wrapper">
 
                 </div>
-                <h4 class="font-weight-bold mb-0  d-md-block mt-1" style="margin-left: 20px;">Aeternity ANES System</h4>
+                <h4 class="font-weight-bold mb-0  d-md-block mt-1" style="margin-left: 20px;">{{i18n .Lang "Aeternity AENS System"}}</h4>
                 <ul class="navbar-nav navbar-nav-right">
                     <li class="nav-item">
                         <h4 class="mb-0 font-weight-bold d-none d-xl-block" id="date_time"></h4>
@@ -132,7 +133,7 @@
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Names Detail</h4>
+                                <h4 class="card-title">{{i18n .Lang "Names Detail"}}</h4>
                                 <!--  <p class="card-description">
                                    Add class <code>.table-bordered</code>
                                  </p> -->
@@ -142,7 +143,7 @@
                                         <tbody>
                                         <tr>
                                             <td>
-                                                Name
+                                                {{i18n .Lang "Name"}}
                                             </td>
                                             <td>
                                                 {{.nameInfo.Name}}
@@ -151,7 +152,7 @@
 
                                         <tr>
                                             <td>
-                                                Create Height
+                                                {{i18n .Lang "Create Height"}}
                                             </td>
                                             <td>
                                                 {{.nameInfo.StartHeight}}
@@ -170,7 +171,7 @@
 
                                         <tr>
                                             <td>
-                                                End Height
+                                                {{i18n .Lang "End Height"}}
                                             </td>
                                             <td>
                                                 {{.nameInfo.EndHeight}}
@@ -179,7 +180,7 @@
 
                                         <tr>
                                             <td>
-                                                Current Height
+                                                {{i18n .Lang "Current Height"}}
                                             </td>
                                             <td>
                                                 {{.nameInfo.CurrentHeight}}
@@ -188,7 +189,7 @@
 
                                         <tr>
                                             <td>
-                                                Over Height
+                                                {{i18n .Lang "Over Height"}}
                                             </td>
                                             <td>
                                                 {{.nameInfo.OverHeight}}
@@ -197,7 +198,7 @@
 
                                         <tr>
                                             <td>
-                                                Price(ae)
+                                                {{i18n .Lang "Price"}}(ae)
                                             </td>
                                             <td>
                                                 {{.nameInfo.CurrentPrice}}
@@ -206,7 +207,7 @@
 
                                         <tr>
                                             <td>
-                                                Owner
+                                                {{i18n .Lang "Owner"}}
                                             </td>
                                             <td>
                                                 {{.nameInfo.Owner}}
@@ -219,17 +220,17 @@
                                 <div style="margin-top: 20px;text-align: center;">
                                     <button type="button" id="claim" class="btn btn-primary btn-rounded btn-fw"
                                             style="margin-left: 20px;width: 150px; height: 45px;  {{.claim_display}}">
-                                        CLAIM
+                                        {{i18n .Lang "CLAIM"}}
                                     </button>
 
                                     <button type="button" id="update" class="btn btn-success btn-rounded btn-fw"
-                                            style="width: 150px;height: 45px;  {{.update_display}}">UPDATE
+                                            style="width: 150px;height: 45px;  {{.update_display}}">{{i18n .Lang "UPDATE"}}
                                     </button>
 
 
                                     <button type="button" id="transfer" class="btn btn-info btn-rounded btn-fw"
                                             style="margin-left: 20px;width: 150px; height: 45px;  {{.transfer_display}}">
-                                        TRANSFER
+                                        {{i18n .Lang "TRANSFER"}}
                                     </button>
 
                                 </div>
@@ -243,18 +244,18 @@
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Add Records </h4>
+                                <h4 class="card-title">{{i18n .Lang "Add Records"}} </h4>
 
                                 <div class="table-responsive">
                                     <table class="table table-hover">
                                         <thead>
                                         <tr>
-                                            <th>User</th>
-                                            <th>Address</th>
-                                            <th>Price(ae)</th>
-                                            <th>Sale</th>
-                                            <th>Height</th>
-                                            <th>Date</th>
+                                            <th>{{i18n .Lang "User"}}</th>
+                                            <th>{{i18n .Lang "Address"}}</th>
+                                            <th>{{i18n .Lang "Price"}}(ae)</th>
+                                            <th>{{i18n .Lang "Sale"}}</th>
+                                            <th>{{i18n .Lang "Height"}}</th>
+                                            <th>{{i18n .Lang "Date"}}</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -347,11 +348,11 @@
         let key = keyStoreToSecretKey("aens");
         key.then(function (signingKey) {
             $.post("/api/name/update", {name: {{.nameInfo.Name}}, signingKey: signingKey}, function (result) {
-                $("#update").text("UPDATE");
+                $("#update").text({{i18n .Lang "UPDATE"}});
                 $("#update").LoadingOverlay("hide");
                 let obj = jQuery.parseJSON(result);
                 if (obj.code === 200) {
-                    swal("Broadcast Sucess!", "please refresh after 5 minutes!", "success");
+                    swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
                 } else {
                     swal(obj.msg);
                 }
@@ -360,7 +361,7 @@
     });
 
     $("#transfer").click(function () {
-        swal("Enter the destination address you want to transfer to", {
+        swal({{i18n .Lang "Enter the destination address you want to transfer to"}}, {
             content: "input",
         })
             .then((recipientAddress) => {
@@ -383,7 +384,7 @@
                         $("#transfer").LoadingOverlay("hide");
                         let obj = jQuery.parseJSON(result);
                         if (obj.code === 200) {
-                            swal("Broadcast Sucess!", "please refresh after 5 minutes!", "success");
+                            swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
                         } else {
                             swal(obj.msg);
                         }
@@ -397,8 +398,8 @@
         let nameFee = $("#namefee").text();
         nameFee = FloatAdd(nameFee, nameFee * 0.05);
         swal({
-            title: "Are you sure?",
-            text: "Are you sure about a markup of  " + nameFee + "  of the current price?!",
+            title: {{i18n .Lang "Are you sure"}}+"?",
+            text:{{i18n .Lang "Are you sure about a markup of"}}+ nameFee + {{i18n .Lang "of the current price"}}+" ?!",
             icon: "warning",
             buttons: true,
             dangerMode: true,
@@ -418,11 +419,11 @@
                             name: {{.nameInfo.Name}},
                             signingKey: signingKey,
                         }, function (result) {
-                            $("#claim").text("CLAIM");
+                            $("#claim").text({{i18n .Lang "CLAIM"}});
                             $("#claim").LoadingOverlay("hide");
                             let obj = jQuery.parseJSON(result);
                             if (obj.code === 200) {
-                                swal("Broadcast Sucess!", "please refresh after 5 minutes!", "success");
+                                swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
                             } else {
                                 swal(obj.msg);
                             }

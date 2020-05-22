@@ -16,6 +16,16 @@
     <link rel="stylesheet" href="../static/css/style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="../static/images/favicon.png"/>
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?6a528fae04a161d7e2a43656a67dfa06";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
 </head>
 <body>
 <div class="container-scroller d-flex">
@@ -23,13 +33,13 @@
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
             <li class="nav-item sidebar-category">
-                <p>Navigation</p>
+                <p>{{i18n .Lang "Navigation"}}</p>
                 <span></span>
             </li>
             <li class="nav-item active">
                 <a class="nav-link" href="/">
                     <i class="mdi mdi-view-quilt menu-icon"></i>
-                    <span class="menu-title">Home</span>
+                    <span class="menu-title">{{i18n .Lang "Home"}}</span>
 
                 </a>
             </li>
@@ -41,55 +51,56 @@
                 <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false"
                    aria-controls="ui-basic">
                     <i class="mdi mdi-palette menu-icon"></i>
-                    <span class="menu-title">My Names</span>
+                    <span class="menu-title">{{i18n .Lang "My Names"}}</span>
                     <i class="menu-arrow"></i>
                 </a>
                 <div class="collapse show" id="ui-basic">
                     <ul class="nav flex-column sub-menu">
                         <li class="nav-item">
-                            <a class="nav-link" href="/my/register">In the register</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/my/over">The registered</a></li>
+                            <a class="nav-link" href="/my/register">{{i18n .Lang "In the register"}}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/my/over">{{i18n .Lang "The registered"}}</a>
+                        </li>
                     </ul>
                 </div>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/auction">
                     <i class="mdi mdi-view-headline menu-icon"></i>
-                    <span class="menu-title">Auction</span>
+                    <span class="menu-title">{{i18n .Lang "Auction"}}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/price">
                     <i class="mdi mdi-chart-pie menu-icon"></i>
-                    <span class="menu-title">Auction Price</span>
+                    <span class="menu-title">{{i18n .Lang "Auction Price"}}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/expire">
                     <i class="mdi mdi-grid-large menu-icon"></i>
-                    <span class="menu-title">Will expire</span>
+                    <span class="menu-title">{{i18n .Lang "Will expire"}}</span>
                 </a>
             </li>
             <li class="nav-item sidebar-category">
-                <p>partners</p>
+                <p>{{i18n .Lang "partners"}}</p>
                 <span></span>
             </li>
             <li class="nav-item">
                 <a class="nav-link" target="_blank" href="https://aeasy.io">
                     <i class="mdi mdi-puzzle menu-icon"></i>
-                    <span class="menu-title">Aeasy</span>
+                    <span class="menu-title">{{i18n .Lang "Aeasy"}}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" target="_blank" href="https://aeknow.org">
                     <i class="mdi mdi-chart-arc menu-icon"></i>
-                    <span class="menu-title">AeKnow</span>
+                    <span class="menu-title">{{i18n .Lang "AeKnow"}}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" target="_blank" href="https://wetrue.io">
                     <i class="mdi mdi-file-cloud menu-icon"></i>
-                    <span class="menu-title">WeTrue</span>
+                    <span class="menu-title">{{i18n .Lang "WeTrue"}}</span>
                 </a>
             </li>
 
@@ -109,11 +120,21 @@
                 <div class="navbar-brand-wrapper">
 
                 </div>
-                <h4 class="font-weight-bold mb-0 d-md-block mt-1" style="margin-left: 20px;">Aeternity AENS System</h4>
+                <h4 id="title" class="font-weight-bold mb-0 d-md-block mt-1"
+                    style="margin-left: 20px;">{{i18n .Lang "Aeternity AENS System"}}</h4>
                 <ul class="navbar-nav navbar-nav-right">
+
+
+                    <li class="nav-item">
+                        <a href="/language" class="nav-link">
+                            <h4 class="mb-0 font-weight-bold d-none d-xl-block">{{i18n .Lang "Chinese/English"}}</h4>
+                        </a>
+                    </li>
+
                     <li class="nav-item">
                         <h4 class="mb-0 font-weight-bold d-none d-xl-block" id="date_time"></h4>
                     </li>
+
 
                 </ul>
                 <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
@@ -126,7 +147,7 @@
                     <li class="nav-item nav-search d-none d-lg-block">
                         <div class="input-group">
                             <input type="text" id="name" class="form-control" style="width: 100%"
-                                   placeholder="Search AENS names..."
+                                   placeholder="{{i18n .Lang "Search AENS names"}}..."
                                    aria-label="search" aria-describedby="search">
                         </div>
 
@@ -135,7 +156,7 @@
 
                 <ul class="navbar-nav navbar-nav-right">
                     <button type="button" id="claim" class="btn btn-primary  btn-fw "
-                            style="width: 150px; margin: 10px">Search
+                            style="width: 150px; margin: 10px">{{i18n .Lang "Search"}}
                     </button>
                     <li class="nav-item nav-profile dropdown">
                         <a class="nav-link dropdown-toggle" href="../static/#" data-toggle="dropdown"
@@ -151,7 +172,7 @@
 
                             <a href="/create" class="dropdown-item">
                                 <i class="mdi mdi-logout"></i>
-                                Add Names
+                                {{i18n .Lang "Add Names"}}
                             </a>
                             <a href="/login/logout" class="dropdown-item">
                                 <i class="mdi mdi-logout"></i>
@@ -172,23 +193,23 @@
                             <div class="col-md-12 grid-margin stretch-card">
                                 <div class="card">
                                     <div class="card-body">
-                                        <p class="card-title">Overall data graph of AENS</p>
-                                        <p class="text-muted">Recently, names have performed as follows</p>
+                                        <p class="card-title">{{i18n .Lang "Overall data graph of AENS"}}</p>
+                                        <p class="text-muted">{{i18n .Lang "Recently names have performed as follows"}}</p>
                                         <div class="row mb-3">
                                             <div class="col-md-7">
                                                 <div class="d-flex justify-content-between traffic-status">
                                                     <div class="item">
-                                                        <p class="mb-">Users</p>
+                                                        <p class="mb-">{{i18n .Lang "Users"}}</p>
                                                         <h5 class="font-weight-bold mb-0">{{.count}}</h5>
                                                         <div class="color-border"></div>
                                                     </div>
                                                     <div class="item">
-                                                        <p class="mb-">Banlance (ae)</p>
+                                                        <p class="mb-">{{i18n .Lang "Banlance"}} (ae)</p>
                                                         <h5 class="font-weight-bold mb-0">{{.sum_price}}</h5>
                                                         <div class="color-border"></div>
                                                     </div>
                                                     <div class="item">
-                                                        <p class="mb-">Names count</p>
+                                                        <p class="mb-">{{i18n .Lang "Names count"}}</p>
                                                         <h5 class="font-weight-bold mb-0">{{.sum}}</h5>
                                                         <div class="color-border"></div>
                                                     </div>
@@ -203,7 +224,7 @@
                                                            data-toggle="pill"
                                                            href="../static/#pills-health" role="tab"
                                                            aria-controls="pills-home" aria-selected="true">
-                                                            Basic data
+                                                            {{i18n .Lang "Basic data"}}
                                                         </a>
 
                                                     </li>
@@ -223,26 +244,26 @@
                     <div class="col-12 col-xl-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Domain name fortune list</h4>
+                                <h4 class="card-title">{{i18n .Lang "Domain name fortune list"}}</h4>
                                 <div class="table-responsive">
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
                                             <th>
-                                                Ranking
+                                                {{i18n .Lang "Ranking"}}
                                             </th>
                                             <th>
 
                                             </th>
                                             <th>
-                                                Address
+                                                {{i18n .Lang "Address"}}
                                             </th>
 
                                             <th>
-                                                Amount(ae)
+                                                {{i18n .Lang "Amount"}}(ae)
                                             </th>
                                             <th>
-                                                Name Count
+                                                {{i18n .Lang "Name Count"}}
                                             </th>
                                         </tr>
                                         </thead>
@@ -339,12 +360,12 @@
 
         let name = $("#name").val();
         if (!name.endWith(".chain")) {
-            swal("Please keep  .chain at the end");
+            swal({{i18n .Lang "Please keep chain at the end"}});
             return;
         }
 
         if (name.length <= 6) {
-            swal("Please enter normal domain name");
+            swal({{i18n .Lang "Please enter normal domain name"}});
             return;
         }
 
@@ -357,16 +378,15 @@
         $.post("/api/name/info", {
             name: name,
         }, function (result) {
-            $("#claim").text("Search");
+            $("#claim").text({{i18n .Lang "Search"}});
             $("#claim").LoadingOverlay("hide");
             let obj = jQuery.parseJSON(result);
             if (obj.code === 200) {
                 window.location.href = "/detail?name=" + name;
             } else {
                 swal({
-                    title: "Are you sure?",
-                    text: "The current domain name is not registered," +
-                        "Do you want to register  the domain name?!",
+                    title: {{i18n .Lang "Are you sure"}}+"?",
+                    text:{{i18n .Lang "The current domain name is not registered Do you want to register the domain name"}} +"?!",
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,
@@ -385,5 +405,8 @@
     };
 
 </script>
+
+<script type="application/javascript" src="../static/js/jquery.i18n.properties.js"></script>
+<script type="application/javascript" src="../static/js/language.js"></script>
 
 </html>

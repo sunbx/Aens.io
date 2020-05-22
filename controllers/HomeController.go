@@ -4,10 +4,15 @@ import (
 	"fmt"
 	"names/utils"
 	"strconv"
+	"strings"
 	"time"
 )
 
 type HomeController struct {
+	BaseController
+}
+
+type LanguageController struct {
 	BaseController
 }
 type RegisterController struct {
@@ -62,16 +67,32 @@ func (c *HomeController) Get() {
 	c.Data["ranking"] = nameBase.Data.Ranking
 	address := c.Ctx.GetCookie("address")
 	if address == "" {
-		c.Data["address"] = "Not logged in, click login"
-		c.Data["login_text"] = "Login"
+		c.Data["address"] = c.Tr("Not logged in, click login")
+		c.Data["login_text"] = c.Tr("Login")
 	} else {
 		c.Data["address"] = address[0:3] + "****" + address[len(address)-5:]
-		c.Data["login_text"] = "Logout"
+		c.Data["login_text"] = c.Tr("Logout")
 	}
 
 	fmt.Println("address->", address)
 	fmt.Println("namebase->", nameBase)
 	c.TplName = "index.html"
+}
+
+func (c *LanguageController) Get() {
+
+	var language = c.Ctx.GetCookie("language")
+	if strings.Contains(language, "zh-CN") || strings.Contains(language, "zh-cn") {
+		c.Lang = "en-US"
+	} else {
+		c.Lang = "zh-CN"
+	}
+
+	fmt.Printf("language", language)
+	fmt.Printf("c.Lang", c.Lang)
+
+	c.Ctx.SetCookie("language", c.Lang)
+	c.Redirect("/", 302)
 }
 
 func (c *LoginLogoutController) Get() {
@@ -257,10 +278,7 @@ func (c *ExpireMyController) Get() {
 
 func (c *DetailController) Get() {
 	address := c.Ctx.GetCookie("address")
-	if address == "" {
-		c.Redirect("/login", 302)
-		return
-	}
+
 	name := c.GetString("name")
 	nameInfo, done := c.getNameInfo(name)
 	if done {
@@ -279,13 +297,16 @@ func (c *DetailController) Get() {
 	c.Data["transfer_display"] = "display: none"
 	c.Data["claim_display"] = "display: none"
 
-	if nameInfo.Data.CurrentHeight < nameInfo.Data.EndHeight {
-		c.Data["claim_display"] = "display: inline-block"
-	}
+	if address != "" {
+		if nameInfo.Data.CurrentHeight < nameInfo.Data.EndHeight {
+			c.Data["claim_display"] = "display: inline-block"
+		}
 
-	if nameInfo.Data.Owner == address && nameInfo.Data.CurrentHeight < nameInfo.Data.OverHeight && nameInfo.Data.CurrentHeight > nameInfo.Data.EndHeight {
-		c.Data["update_display"] = "display: inline-block"
-		c.Data["transfer_display"] = "display: inline-block"
+		if nameInfo.Data.Owner == address && nameInfo.Data.CurrentHeight < nameInfo.Data.OverHeight && nameInfo.Data.CurrentHeight > nameInfo.Data.EndHeight {
+			c.Data["update_display"] = "display: inline-block"
+			c.Data["transfer_display"] = "display: inline-block"
+		}
+
 	}
 
 	c.Data["nameInfo"] = nameInfo.Data
