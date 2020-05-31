@@ -69,7 +69,7 @@ type LoginData struct {
 
 func (c *ApiLoginController) Post() {
 	mnemonic := c.GetString("mnemonic")
-	mnemonic = strings.Trim(mnemonic," ")
+	mnemonic = strings.Trim(mnemonic, " ")
 	mnemonic = strings.Replace(mnemonic, "\n", "", -1)
 	index := c.GetString("index")
 	resp, err := http.PostForm("https://aeasy.io/api/user/login",
@@ -77,7 +77,6 @@ func (c *ApiLoginController) Post() {
 			"app_id":        {beego.AppConfig.String("AEASY::appId")},
 			"mnemonic":      {mnemonic},
 			"index_address": {index},
-
 		})
 	if err != nil {
 		c.ErrorJson(-500, err.Error(), JsonData{})
@@ -301,26 +300,14 @@ func (c *ApiTransferAddController) Post() {
 	name := c.GetString("name")
 	signingKey := c.GetString("signingKey")
 	recipientAddress := c.GetString("recipientAddress")
-	resp, err := http.PostForm("https://aeasy.io/api/names/transfer",
-		url.Values{
-			"app_id":           {beego.AppConfig.String("AEASY::appId")},
-			"name":             {name},
-			"signingKey":       {signingKey},
-			"recipientAddress": {recipientAddress},
-		})
-	if err != nil {
-		c.ErrorJson(-500, err.Error(), JsonData{})
+	nameTransfer, done := c.TransferName(name, signingKey, recipientAddress)
+	if done {
 		return
 	}
-
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		c.ErrorJson(-500, err.Error(), JsonData{})
-		return
-	}
-	c.Ctx.WriteString(string(body))
+	c.SuccessJson(nameTransfer.Data.Hash)
 }
+
+
 
 func (c *ApiUserInfoController) Post() {
 	signingKey := c.GetString("signingKey")

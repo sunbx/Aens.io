@@ -16,10 +16,6 @@
     <link rel="stylesheet" href="../static/css/style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="../static/images/favicon.png"/>
-    <style type="text/css">
-
-
-    </style>
 </head>
 <body>
 <div class="container-scroller d-flex">
@@ -142,12 +138,11 @@
 
                 </div>
                 <h4 class="font-weight-bold mb-0  d-md-block mt-1"
-                    style="margin-left: 20px;">{{i18n .Lang "Aeternity AENS System"}}</h4>
+                    style="margin-left: 20px;">{{i18n .Lang "Aeternity ANES System"}}</h4>
                 <ul class="navbar-nav navbar-nav-right">
                     <li class="nav-item">
                         <h4 class="mb-0 font-weight-bold d-none d-xl-block" id="date_time"></h4>
                     </li>
-
                 </ul>
                 <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
                         data-toggle="offcanvas">
@@ -163,12 +158,67 @@
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title"> {{i18n .Lang "My Expire Names time"}}</h4>
+                                <h4 class="card-title"> {{i18n .Lang "A domain name in an OTC transaction"}}</h4>
                                 <!--  <p class="card-description">
-                                   Add class <code>.table-striped</code>
+                                   Add class <code>.table-bordered</code>
                                  </p> -->
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
+                                <div class="table-responsive pt-3">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                #
+                                            </th>
+                                            <th>
+                                                {{i18n .Lang "name"}}
+                                            </th>
+                                            <th>
+                                                {{i18n .Lang "Offer"}}(ae)
+                                            </th>
+                                            <th>
+                                                {{i18n .Lang "Operation"}}
+                                            </th>
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+
+                                        {{range $key, $val := .markets}}
+                                            <tr>
+                                                <td>
+                                                    {{$val.ID}}
+                                                </td>
+                                                <td>
+                                                    {{$val.Name}}
+                                                </td>
+                                                <td>
+                                                    {{$val.Offer}}
+                                                </td>
+
+                                                <td>
+                                                    <a href="#"  onclick="cancel(this, {{$val.Name}})" style="display: block;text-align: center">{{i18n $.Lang "Cancel the deal"}}</a>
+
+                                                </td>
+                                            </tr>
+
+                                        {{end}}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">{{i18n .Lang "I have registered the domain name"}}</h4>
+                                <!--  <p class="card-description">
+                                   Add class <code>.table-bordered</code>
+                                 </p> -->
+                                <div class="table-responsive pt-3">
+                                    <table class="table table-bordered">
                                         <thead>
                                         <tr>
                                             <th>
@@ -178,93 +228,73 @@
                                                 {{i18n .Lang "Name"}}
                                             </th>
                                             <th>
-                                                {{i18n .Lang "Address"}}
+                                                {{i18n .Lang "Price"}}(ae)
                                             </th>
                                             <th>
-                                                {{i18n .Lang "Progress"}}
+                                                {{i18n .Lang "Gains"}}
                                             </th>
                                             <th>
-                                                {{i18n .Lang "Amount"}}(ae)
-                                            </th>
-                                            <th>
-                                                {{i18n .Lang "The end of the"}}
+                                                {{i18n .Lang "Operation"}}
                                             </th>
                                         </tr>
                                         </thead>
                                         <tbody>
 
                                         {{range $key, $val := .name}}
+
                                             <tr>
                                                 <td>
                                                     {{$val.Id}}
                                                 </td>
-
                                                 <td>
                                                     <a href="/detail?name={{$val.Name}}"> {{$val.Name}}</a>
-
-                                                </td>
-                                                <td class="py-1">
-
-                                                    <div id="identicon" lang="">
-                                                        <svg data-jdenticon-value="{{$val.Owner}}"
-                                                             width="30" height="30">
-                                                            {{$val.Owner}}
-                                                        </svg>
-                                                    </div>
-                                                    <div style="display: inline-block; height: 30px;margin-left: 10px">
-                                                        <span style="line-height: 30px"> {{$val.Address}}</span>
-                                                    </div>
-
-                                                </td>
-                                                <td>
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-warning" role="progressbar"
-                                                             style="width: {{$val.Progress}}%" aria-valuenow="20"
-                                                             aria-valuemin="0"
-                                                             aria-valuemax="100"></div>
-                                                    </div>
                                                 </td>
                                                 <td>
                                                     {{$val.CurrentPrice}}
                                                 </td>
+                                                <td class="text-success">
+                                                    {{$val.Gains}}% <i class="mdi mdi-arrow-up"></i>
+                                                </td>
 
                                                 <td>
-                                                    {{$val.Countdown}}
+                                                    <a href="#" style="display: block;text-align: center"
+                                                       onclick="market(this, {{$val.Name}})"> {{i18n $.Lang "trading"}} </a>
                                                 </td>
                                             </tr>
+
+
                                         {{end}}
+
+
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="btn-group pb-12 pb-lg-12" role="group" aria-label="Basic example"
-                         style="margin: 0 auto;">
-                        <a href="/my/over?page={{.pageLeft}}" style="{{.pageLeftDisplay}};">
-                            <button type="button" class="btn btn-outline-secondary"><<</button>
-                        </a>
+                            <div class="btn-group pb-12 pb-lg-12" role="group" aria-label="Basic example"
+                                 style="margin: 0 auto; margin-bottom: 20px;">
+                                <a href="/otc/hosting?page={{.pageLeft}}" style="{{.pageLeftDisplay}};">
+                                    <button type="button" class="btn btn-outline-secondary"><<</button>
+                                </a>
 
-                        <a href="/my/over?page={{.pageRight}}" style="margin-left:10px;{{.pageRightDisplay}};">
-                            <button type="button" class="btn btn-outline-secondary">>></button>
-                        </a>
+                                <a href="/otc/hosting?page={{.pageRight}}"
+                                   style="margin-left:10px;{{.pageRightDisplay}};">
+                                    <button type="button" class="btn btn-outline-secondary">>></button>
+                                </a>
+
+                            </div>
+                        </div>
 
                     </div>
                 </div>
-
             </div>
-
+            <!-- row end -->
         </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:./partials/_footer.html -->
 
-
-        <!-- row end -->
+        <!-- partial -->
     </div>
-    <!-- content-wrapper ends -->
-    <!-- partial:./partials/_footer.html -->
-
-    <!-- partial -->
-</div>
-<!-- main-panel ends -->
+    <!-- main-panel ends -->
 </div>
 <!-- page-body-wrapper ends -->
 </div>
@@ -280,66 +310,115 @@
 <script src="../static/js/off-canvas.js"></script>
 <script src="../static/js/hoverable-collapse.js"></script>
 <script src="../static/js/template.js"></script>
+<script type="text/javascript" src="https://wetrue.io/assets/scripts/aepp-sdk.browser-script-721.js"></script>
 <!-- endinject -->
 <!-- plugin js for this page -->
 <!-- End plugin js for this page -->
 <!-- Custom js for this page-->
 <script src="../static/js/dashboard.js"></script>
 <!-- End custom js for this page-->
-<script src="https://cdn.jsdelivr.net/npm/jdenticon@2.2.0" async>
-
-</script>
+<script type="text/javascript" src="../static/js/sweetalert.min.js"></script>
 <script type="text/javascript" src="https://wetrue.io/assets/scripts/aepp-sdk.browser-script-721.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
 
 </body>
 
-
 <script>
-    // var dt = new Date();
-    // var m=new Array("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Spt","Oct","Nov","Dec");
-    // var w=new Array("Monday","Tuseday","Wednesday","Thursday","Friday","Saturday","Sunday");
-    // var d=new Array("st","nd","rd","th");
-    // mn=dt.getMonth();
-    // wn=dt.getDay();
-    // dn=dt.getDate();
-    // var dns;
-    // if(((dn)<1) ||((dn)>3)){
-    //     dns=d[3];
-    // }
-    // else
-    // {
-    //     dns=d[(dn)-1];
-    //     if((dn==11)||(dn==12)){
-    //         dns=d[3];
-    //     }
-    // }
-    // alert(m[mn]+" "+dn+dns+" " +w[wn-1]+" "+dt.getFullYear());
+    function market(view, name) {
+        swal({{i18n .Lang "Please enter that the price you want to sell (ae) is at least 1ae and is an integer"}}, {
+            content: "input",
+        }).then((number) => {
+                if (number == "") {
+                    swal({{i18n .Lang "Please enter quantity"}});
+                    return false;
+                }
+                if (!(/(^[1-9]\d*$)/.test(number))) {
+                    swal({{i18n .Lang "The input is not a positive integer"}});
+                    return false;
+                }
 
+                swal({{i18n .Lang "Enter your temporary password"}}, {
+                    content: "input",
+                }).then((password) => {
+                    let key = keyStoreToSecretKey(password);
+                    key.then(function (signingKey) {
+                        $(view).text(" ");
+                        $(view).LoadingOverlay("show", {
+                            background: "",
+                            imageColor: "#F22F70"
+                        });
 
-    async function pageRight() {
-        let key = await keyStoreToSecretKey("aens");
-        $.StandardPost('/expire/my', {signingKey: key, page:{{.pageRight}}});
+                        $.post("/api/otc/market/in", {
+                            name: name,
+                            signingKey: signingKey,
+                            offer: number
+                        }, function (result) {
+                            $(view).text({{i18n .Lang "trading"}});
+                            $(view).LoadingOverlay("hide");
+                            let obj = jQuery.parseJSON(result);
+                            if (obj.code === 200) {
+                                swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
+                            } else {
+                                swal(obj.msg);
+                            }
+                        });
+                    }).catch(function (e) {
+                        swal("Password Error");
+                    });
+
+                });
+            }
+        );
     }
 
-    async function pageLeft() {
-        let key = await keyStoreToSecretKey("aens");
-        $.StandardPost('/expire/my', {signingKey: key, page:{{.pageLeft}}});
+    function cancel(view, name) {
+
+        swal({{i18n .Lang "Enter your temporary password"}}, {
+            content: "input",
+        }).then((password) => {
+                let key = keyStoreToSecretKey(password);
+                key.then(function (signingKey) {
+                    $(view).text(" ");
+                    $(view).LoadingOverlay("show", {
+                        background: "",
+                        imageColor: "#F22F70"
+                    });
+
+                    $.post("/api/otc/market/cancel", {
+                        name: name,
+                        signingKey: signingKey,
+                    }, function (result) {
+                        $(view).text({{i18n .Lang "Cancel the deal"}});
+                        $(view).LoadingOverlay("hide");
+                        let obj = jQuery.parseJSON(result);
+                        if (obj.code === 200) {
+                            swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success").then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            swal(obj.msg);
+                        }
+                    });
+                }).catch(function (e) {
+                    swal("Password Error");
+                });
+
+
+            }
+        );
     }
 
-    async function myExpire() {
-        let key = await keyStoreToSecretKey("aens");
-        $.StandardPost('/expire/my', {signingKey: key});
-    }
+    String.prototype.endWith = function (endStr) {
+        var d = this.length - endStr.length;
+        return (d >= 0 && this.lastIndexOf(endStr) == d)
+    };
 
-    function keyStoreToSecretKey(password) {
+    async function keyStoreToSecretKey(password) {
         const Keystore = JSON.parse(localStorage.getItem("sign"));
         return Ae.Keystore.recover(password, Keystore).then(strhex => {
             return strhex;
         });
     }
-
-
 </script>
 
 </html>

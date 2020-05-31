@@ -6,8 +6,9 @@ import (
 )
 
 func init() {
-	beego.Router("/", &controllers.HomeController{})
+	//静态页
 
+	beego.Router("/", &controllers.HomeController{})
 	//切换语言
 	beego.Router("/language", &controllers.LanguageController{})
 
@@ -31,13 +32,16 @@ func init() {
 
 	beego.Router("/create", &controllers.CreateController{})
 
+	beego.Router("/otc/hosting", &controllers.OTCHostingController{})
+
+	beego.Router("/otc/market", &controllers.OTCMarketController{})
+
+	//接口
 	//aeasy login
 	beego.Router("/api/login", &controllers.ApiLoginController{})
 
 	//aeasy register
 	beego.Router("/api/register", &controllers.ApiRegisterController{})
-
-
 
 	//ApiNamesPriceController
 	beego.Router("/api/name/add", &controllers.ApiNamesAddController{})
@@ -53,5 +57,14 @@ func init() {
 
 	//ApiNamesPriceController
 	beego.Router("/api/user/info", &controllers.ApiUserInfoController{})
+
+	//market
+	//ApiNamesPriceController
+	beego.Router("/api/otc/market/in", &controllers.MarketInController{})
+
+	beego.Router("/api/otc/market/cancel", &controllers.MarketCancelController{})
+
+
+	beego.Router("/api/otc/market/out", &controllers.MarketOutController{})
 
 }

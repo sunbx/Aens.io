@@ -2,6 +2,8 @@ package utils
 
 import (
 	"bytes"
+	"crypto/md5"
+	"encoding/hex"
 	"fmt"
 	"math"
 	"strconv"
@@ -35,9 +37,17 @@ func StrTime(atime int64) string {
 
 func Decimal(value float64) float64 {
 	value, _ = strconv.ParseFloat(fmt.Sprintf("%.2f", value), 64)
+	if value < 0 {
+		value = 0
+	}
 	return value
 }
 
+func Md5V(str string) string {
+	h := md5.New()
+	h.Write([]byte(str))
+	return hex.EncodeToString(h.Sum(nil))
+}
 
 /**
 * @des 拼接字符串

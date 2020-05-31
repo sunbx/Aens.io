@@ -2,7 +2,9 @@ package controllers
 
 import (
 	"fmt"
+	"names/models"
 	"names/utils"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -48,6 +50,14 @@ type DetailController struct {
 }
 
 type CreateController struct {
+	BaseController
+}
+
+type OTCHostingController struct {
+	BaseController
+}
+
+type OTCMarketController struct {
 	BaseController
 }
 
@@ -107,6 +117,91 @@ func (c *LoginLogoutController) Get() {
 
 func (c *RegisterController) Get() {
 	c.TplName = "register.html"
+}
+
+type nameDatas []NameData
+
+func (s nameDatas) Len() int           { return len(s) }
+func (s nameDatas) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
+func (s nameDatas) Less(i, j int) bool { return len(s[i].Name) < len(s[j].Name) }
+
+func (c *OTCHostingController) Get() {
+	page, _ := c.GetInt("page", 1)
+	address := c.Ctx.GetCookie("address")
+	if address != "" {
+		name, done := c.getRegisterMyName(strconv.Itoa(page), address)
+		if done {
+			return
+		}
+		for i := 0; i < len(name.Data); i++ {
+			name.Data[i].Id = (i + 1) + (page-1)*20
+			name.Data[i].Address = name.Data[i].Owner[0:3] + "****" + name.Data[i].Owner[len(name.Data[i].Owner)-5:]
+			name.Data[i].Progress = int64(float64(name.Data[i].CurrentHeight-(name.Data[i].OverHeight-50000)) / (float64(name.Data[i].OverHeight - (name.Data[i].OverHeight - 50000))) * 100)
+			name.Data[i].Countdown = utils.StrTime(time.Now().Unix() - (name.Data[i].OverHeight-name.Data[i].CurrentHeight)*3*60)
+
+			cPrice, _ := strconv.ParseFloat(name.Data[i].CurrentPrice, 64)
+			price, _ := strconv.ParseFloat(name.Data[i].Price, 64)
+			name.Data[i].Gains = utils.Decimal((cPrice - price) / price * 100)
+		}
+
+		sort.Sort(nameDatas(name.Data))
+		c.Data["name"] = name.Data
+		c.Data["pageLeftDisplay"] = "display: block"
+		c.Data["pageRightDisplay"] = "display: block"
+		if page-1 < 1 {
+			c.Data["pageLeftDisplay"] = "display: none"
+		}
+		if len(name.Data) < 20 {
+			c.Data["pageRightDisplay"] = "display: none"
+		}
+		c.Data["pageLeft"] = page - 1
+		c.Data["pageRight"] = page + 1
+
+		markets, e := models.GetNamesMarketIns(address, 1)
+
+		for i := 0; i < len(markets); i++ {
+			markets[i].ID = i + 1
+		}
+
+		fmt.Println("err->", e)
+		c.Data["markets"] = markets
+
+		c.TplName = "my_hosting.html"
+	} else {
+		c.Redirect("/login", 302)
+	}
+
+}
+
+func (c *OTCMarketController) Get() {
+	name := c.GetString("name")
+	address := c.Ctx.GetCookie("address")
+	if address == "" {
+		c.Redirect("/login", 302)
+		return
+	} else {
+		info, _ := c.getUserInfoAddress(address)
+		c.Data["balance"] = info.Data.Balance
+		c.Data["address"] = address
+		c.Data["name"] = name
+
+		markets, err := models.GetNamesMarketInsStaus(1)
+
+		if err != nil {
+			c.ErrorJson(-500, err.Error(), JsonData{})
+			return
+		}
+		for i := 0; i < len(markets); i++ {
+			markets[i].ID = i + 1
+			markets[i].InOwner = markets[i].InOwner[0:3] + "****" + markets[i].InOwner[len(markets[i].InOwner)-5:]
+		}
+		fmt.Println("->", markets)
+
+		c.Data["markets"] = markets
+
+		c.TplName = "market.html"
+	}
+
 }
 func (c *AuctionController) Get() {
 	page, _ := c.GetInt("page", 1)
@@ -321,7 +416,7 @@ func (c *CreateController) Get() {
 		c.Redirect("/login", 302)
 		return
 	} else {
-		info, _ := c.getUserInfo(address)
+		info, _ := c.getUserInfoAddress(address)
 		c.Data["balance"] = info.Data.Balance
 		c.Data["address"] = address
 
