@@ -69,7 +69,7 @@ func TaskMarketStatus() {
 		return
 	}
 	for i := 0; i < len(markets); i++ {
-		if markets[i].OutStatus == 1 && markets[i].InStatus == 1 {
+		if markets[i].OutStatus == 1 {
 
 			height, b2 := controllers.GetBlockHeight()
 			if b2 {
@@ -78,30 +78,31 @@ func TaskMarketStatus() {
 			}
 			aensSigningKey := beego.AppConfig.String("names::signingKey")
 
-			walletTransfer, i2 := controllers.Transfer(strconv.Itoa(markets[i].Offer), markets[i].InOwner, aensSigningKey)
-			if i2 {
-				fmt.Println("Market TransferName ERROR")
-				continue
-			}
-			fmt.Println("Market TransferName ->", walletTransfer)
-
-			err = models.UpdateNamesMarketTokenTx(markets[i].ID, walletTransfer.Data.Tx.Hash, int(height))
-			if err != nil {
-				fmt.Println("UpdateNamesMarketNameTx->", err)
-				continue
-			}
-
-
-			transfer, b := controllers.TransferName(markets[i].Name, aensSigningKey, markets[i].OutOwner)
-			if b {
-				fmt.Println("Market TransferName ERROR")
-				continue
-			}
-			err := models.UpdateNamesMarketNameTx(markets[i].ID, transfer.Data.Hash, int(height))
-			if err != nil {
-				fmt.Println("UpdateNamesMarketNameTx->", err)
+			if markets[i].TxToken == ""{
+				walletTransfer, i2 := controllers.Transfer(strconv.Itoa(markets[i].Offer), markets[i].InOwner, aensSigningKey)
+				if i2 {
+					fmt.Println("Market TransferName ERROR")
+					continue
+				}
+				fmt.Println("Market TransferName ->", walletTransfer)
+				err = models.UpdateNamesMarketTokenTx(markets[i].ID, walletTransfer.Data.Tx.Hash, int(height))
+				if err != nil {
+					fmt.Println("UpdateNamesMarketNameTx->", err)
+					continue
+				}
 			}
 
+			if markets[i].TxName == ""{
+				transfer, b := controllers.TransferName(markets[i].Name, aensSigningKey, markets[i].OutOwner)
+				if b {
+					fmt.Println("Market TransferName ERROR")
+					continue
+				}
+				err := models.UpdateNamesMarketNameTx(markets[i].ID, transfer.Data.Hash, int(height))
+				if err != nil {
+					fmt.Println("UpdateNamesMarketNameTx->", err)
+				}
+			}
 		}
 	}
 }
