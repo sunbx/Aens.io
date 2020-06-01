@@ -145,6 +145,9 @@ func (c *OTCHostingController) Get() {
 		}
 
 		sort.Sort(nameDatas(name.Data))
+		for i := 0; i < len(name.Data); i++ {
+			name.Data[i].Id = i + 1
+		}
 		c.Data["name"] = name.Data
 		c.Data["pageLeftDisplay"] = "display: block"
 		c.Data["pageRightDisplay"] = "display: block"
