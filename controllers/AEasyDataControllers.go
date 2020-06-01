@@ -169,19 +169,23 @@ func TransferName(name string, signingKey string, recipientAddress string) (Name
 			"recipientAddress": {recipientAddress},
 		})
 	if err != nil {
+		fmt.Println("err != nil",err.Error())
 		return NameTransfer{}, true
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
+		fmt.Println("ioutil.ReadAll(resp.Body)",err.Error())
 		return NameTransfer{}, true
 	}
 	var nameTransfer NameTransfer
 	err = json.Unmarshal([]byte(string(body)), &nameTransfer)
 	if err != nil {
+		fmt.Println("json.Unmarshal([]byte(string(body)), &nameTransfer), &nameTransfer)",nameTransfer)
 		return NameTransfer{}, true
 	}
 	if nameTransfer.Code != 200 {
+		fmt.Println("json.Unmarshal([]byte(string(body)), &nameTransfer)",nameTransfer)
 		return NameTransfer{}, true
 	}
 	return nameTransfer, false

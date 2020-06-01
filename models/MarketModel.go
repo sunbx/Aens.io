@@ -143,8 +143,7 @@ func GetNamesMarketMarketStaus() ([]NamesMarket, error) {
 		Filter("in_status", 1).
 		Filter("out_status", 1).
 		Filter("cancel_tx", "").
-		Filter("tx_name", "").
-		Filter("tx_token", "").
+
 		All(&namesMarket)
 	return namesMarket, err
 }
