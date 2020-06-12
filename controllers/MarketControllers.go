@@ -94,7 +94,7 @@ func (c *MarketOutController) Post() {
 		return
 	}
 
-	err = models.UpdateNamesMarketInsOut(name, markets.InOwner, 1, markets.InToken, transfer.Data.Tx.Hash,userInfo.Data.Address, int(height))
+	err = models.UpdateNamesMarketInsOut(name, markets.InOwner, 1, markets.InToken, transfer.Data.Tx.Hash, userInfo.Data.Address, int(height))
 	if err != nil {
 		lock.Unlock()
 		c.ErrorJson(-500, err.Error()+"", JsonData{})
@@ -133,6 +133,12 @@ func (c *MarketInController) Post() {
 	//如果域名已经过期
 	if nameInfo.Data.CurrentHeight >= nameInfo.Data.OverHeight {
 		c.ErrorJson(-500, "The domain name has expired", JsonData{})
+		return
+	}
+
+	//如果域名已经过期
+	if nameInfo.Data.OverHeight-nameInfo.Data.CurrentHeight < 20*24*30 {
+		c.ErrorJson(-500, "Please keep domain name valid for more than one month", JsonData{})
 		return
 	}
 

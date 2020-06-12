@@ -20,6 +20,8 @@ func init() {
 
 	beego.Router("/auction", &controllers.AuctionController{})
 
+	beego.Router("/detail/address", &controllers.DetailAddressController{})
+
 	beego.Router("/my/register", &controllers.AuctionMyController{})
 
 	beego.Router("/my/over", &controllers.ExpireMyController{})
@@ -63,7 +65,6 @@ func init() {
 	beego.Router("/api/otc/market/in", &controllers.MarketInController{})
 
 	beego.Router("/api/otc/market/cancel", &controllers.MarketCancelController{})
-
 
 	beego.Router("/api/otc/market/out", &controllers.MarketOutController{})
 

@@ -8,9 +8,11 @@ import (
 	"github.com/beego/i18n"
 	_ "github.com/go-sql-driver/mysql" // import your used driver
 	"names/controllers"
+	_ "names/controllers"
 	"names/models"
 	_ "names/routers"
 	"strconv"
+	"time"
 )
 
 //引入数据模型
@@ -43,12 +45,13 @@ func main() {
 var isTask = true
 
 func task() {
-	tk := toolbox.NewTask("myTask", "0/10 * * * * *", func() error {
+	tk := toolbox.NewTask("myTaskName", "0/120 * * * * *", func() error {
 		if (isTask) {
 			isTask = false
 			TaskInsStatus()
 			TaskOutStatus()
 			TaskMarketStatus()
+			TaskNameUpdate()
 			isTask = true
 		} else {
 		}
@@ -56,10 +59,31 @@ func task() {
 		return nil
 	})
 
-	toolbox.AddTask("myTask", tk)
+	toolbox.AddTask("myTaskName", tk)
 	toolbox.StartTask()
 	fmt.Println("定时任务开启")
 
+}
+
+func TaskNameUpdate() {
+	markets, err := models.GetNamesMarketInsStaus(1)
+	if err != nil {
+		fmt.Println("TaskInsStatus->", err)
+		return
+	}
+
+	for i := 0; i < len(markets); i++ {
+		info, b := controllers.GetNameInfo(markets[i].Name)
+		if b {
+			continue
+		}
+		if info.Data.OverHeight-info.Data.CurrentHeight < 50000-20*24*10 {
+			fmt.Println("info.Data.OverHeight - info.Data.CurrentHeight ", info.Data.OverHeight-info.Data.CurrentHeight)
+			aensSigningKey := beego.AppConfig.String("names::signingKey")
+			controllers.UpdateName(aensSigningKey, info.Data.Name)
+			time.Sleep(3000)
+		}
+	}
 }
 
 func TaskMarketStatus() {
@@ -78,7 +102,7 @@ func TaskMarketStatus() {
 			}
 			aensSigningKey := beego.AppConfig.String("names::signingKey")
 
-			if markets[i].TxToken == ""{
+			if markets[i].TxToken == "" {
 				walletTransfer, i2 := controllers.Transfer(strconv.Itoa(markets[i].Offer), markets[i].InOwner, aensSigningKey)
 				if i2 {
 					fmt.Println("Market TransferName ERROR")
@@ -92,7 +116,7 @@ func TaskMarketStatus() {
 				}
 			}
 
-			if markets[i].TxName == ""{
+			if markets[i].TxName == "" {
 				transfer, b := controllers.TransferName(markets[i].Name, aensSigningKey, markets[i].OutOwner)
 				if b {
 					fmt.Println("Market TransferName ERROR")

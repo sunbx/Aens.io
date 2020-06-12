@@ -77,13 +77,13 @@
                 <span></span>
             </li>
             <li class="nav-item">
-                <a class="nav-link"  rel="noopener noreferrer" href="/otc/hosting">
+                <a class="nav-link" rel="noopener noreferrer" href="/otc/hosting">
                     <i class="mdi mdi-directions-fork menu-icon"></i>
                     <span class="menu-title">{{i18n .Lang "My hosting"}}</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link"  rel="noopener noreferrer" href="/otc/market">
+                <a class="nav-link" rel="noopener noreferrer" href="/otc/market">
                     <i class="mdi mdi-code-equal menu-icon"></i>
                     <span class="menu-title">{{i18n .Lang "Name Market"}}</span>
                 </a>
@@ -93,7 +93,7 @@
                 <span></span>
             </li>
             <li class="nav-item">
-                <a class="nav-link"  href="/language">
+                <a class="nav-link" href="/language">
                     <i class="mdi mdi-stack-exchange menu-icon"></i>
                     <span class="menu-title">{{i18n .Lang "language"}}</span>
                 </a>
@@ -138,11 +138,12 @@
 
                 </div>
                 <h4 class="font-weight-bold mb-0  d-md-block mt-1"
-                    style="margin-left: 20px;">{{i18n .Lang "Aeternity ANES System"}}</h4>
+                    style="margin-left: 20px;">{{i18n .Lang "Aeternity AENS System"}}</h4>
                 <ul class="navbar-nav navbar-nav-right">
                     <li class="nav-item">
                         <h4 class="mb-0 font-weight-bold d-none d-xl-block" id="date_time"></h4>
                     </li>
+
                 </ul>
                 <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
                         data-toggle="offcanvas">
@@ -155,46 +156,13 @@
         <div class="main-panel">
             <div class="content-wrapper">
                 <div class="row">
-                    <div class="col-md-8 grid-margin stretch-card">
-                        <div class="card">
-                            <div class="card-body" style="text-align:left">
-                                <blockquote class="blockquote">
-                                    <h1 class="mt-2 display-4">{{i18n .Lang "Current ae balance"}}</h1>
-
-                                    <h1 class="display-2">{{.balance}} AE</h1>
-
-                                    <p class="mb-0 display-4">{{i18n .Lang "address"}} </p>
-                                    <p class="mb-0 mt-3 display-5">
-                                        {{.address}} </p>
-                                </blockquote>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 grid-margin stretch-card">
-                        <div class="card">
-                            <div class="card-body" style="margin: 0 auto">
-                                <h4 class="card-title"
-                                    style="text-align: center">{{i18n .Lang "Sweep yards top-up"}}</h4>
-                                <div class="code" style="margin: auto 0;text-align: center;margin-top: 20px">
-                                    <div id="qrcode" class="qrcode"></div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">{{i18n .Lang "OTC market"}}</h4>
+                                <h4 class="card-title">{{i18n .Lang "Address"}} : {{.address}}</h4>
                                 <!--  <p class="card-description">
                                    Add class <code>.table-bordered</code>
                                  </p> -->
-
-
                                 <div class="table-responsive pt-3">
                                     <table class="table table-bordered">
                                         <thead>
@@ -206,42 +174,49 @@
                                                 {{i18n .Lang "Name"}}
                                             </th>
                                             <th>
-                                                {{i18n .Lang "Offer"}}(ae)
+                                                {{i18n .Lang "Progress"}}
+                                            </th>
+                                            <th>
+                                                {{i18n .Lang "Amount"}}(ae)
+                                            </th>
+                                            <th>
+                                                {{i18n .Lang "Deadline"}}
                                             </th>
                                             <th>
                                                 {{i18n .Lang "Owner"}}
                                             </th>
-                                            <th>
-                                                {{i18n .Lang "Operation"}}
-                                            </th>
-
                                         </tr>
                                         </thead>
                                         <tbody>
 
 
-                                        {{range $key, $val := .markets}}
+                                        {{range $key, $val := .name}}
                                             <tr>
                                                 <td>
-                                                    {{$val.ID}}
+                                                    {{$val.Id}}
                                                 </td>
                                                 <td>
                                                     <a href="/detail?name={{$val.Name}}"> {{$val.Name}}</a>
                                                 </td>
                                                 <td>
-                                                    {{$val.Offer}}
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-success" role="progressbar"
+                                                             style="width: {{$val.Progress}}%" aria-valuenow="25"
+                                                             aria-valuemin="0" aria-valuemax="100"></div>
+                                                    </div>
                                                 </td>
-
                                                 <td>
-                                                    {{$val.InOwner}}
+                                                    {{$val.CurrentPrice}}
                                                 </td>
-
                                                 <td>
-                                                    <a href="#" style="display: block;text-align: center"
-                                                       onclick="buy(this, {{$val.Name}})">{{i18n $.Lang "buy"}}</a>
+                                                    {{$val.Countdown}}
+                                                </td>
+                                                <td>
+                                                    {{$val.Address}}
                                                 </td>
                                             </tr>
                                         {{end}}
+
 
                                         </tbody>
                                     </table>
@@ -249,7 +224,19 @@
                             </div>
                         </div>
                     </div>
+                    <div class="btn-group pb-12 pb-lg-12" role="group" aria-label="Basic example"
+                         style="margin: 0 auto;">
+                        <a href="/detail/address?address={{.address}}&page={{.pageLeft}}" style="{{.pageLeftDisplay}};">
+                            <button type="button" class="btn btn-outline-secondary"><<</button>
+                        </a>
+
+                        <a href="/detail/address?address={{.address}}&page={{.pageRight}}" style="margin-left:10px;{{.pageRightDisplay}};">
+                            <button type="button" class="btn btn-outline-secondary">>></button>
+                        </a>
+
+                    </div>
                 </div>
+
             </div>
 
 
@@ -276,94 +263,12 @@
 <script src="../static/js/off-canvas.js"></script>
 <script src="../static/js/hoverable-collapse.js"></script>
 <script src="../static/js/template.js"></script>
-<script type="text/javascript" src="https://wetrue.io/assets/scripts/aepp-sdk.browser-script-721.js"></script>
-<script src="../static/js/off-canvas.js"></script>
-<script src="../static/js/hoverable-collapse.js"></script>
-<script src="../static/js/template.js"></script>
-<script type="text/javascript" src="https://wetrue.io/assets/scripts/aepp-sdk.browser-script-721.js"></script>
 <!-- endinject -->
 <!-- plugin js for this page -->
 <!-- End plugin js for this page -->
 <!-- Custom js for this page-->
 <script src="../static/js/dashboard.js"></script>
 <!-- End custom js for this page-->
-<script src="../static/js/jquery.qrcode.min.js"></script>
-<script type="text/javascript" src="../static/js/sweetalert.min.js"></script>
-<script type="text/javascript" src="https://wetrue.io/assets/scripts/aepp-sdk.browser-script-721.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
 </body>
-
-<script>
-    let address = $('#address').text();
-    $('#qrcode').qrcode({
-        foreground: "#311B58",
-        background: "#FFF",
-        width: 200, height: 200,
-        text: {{.address}}
-    });
-
-    function buy(view, name) {
-
-
-        swal({
-            title: {{i18n .Lang "Are you sure?"}},
-            text: {{i18n .Lang "You definitely want to buy"}} + name + "?",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then((willDelete) => {
-                swal({{i18n .Lang "Enter your temporary password"}}, {
-                    content: "input",
-                }).then((password) => {
-                        let key = keyStoreToSecretKey(password);
-                        key.then(function (signingKey) {
-                            $(view).text(" ");
-                            $(view).LoadingOverlay("show", {
-                                background: "",
-                                imageColor: "#F22F70"
-                            });
-
-                            $.post("/api/otc/market/out", {
-                                name: name,
-                                signingKey: signingKey,
-                            }, function (result) {
-                                $(view).text({{i18n .Lang "buy"}});
-                                $(view).LoadingOverlay("hide");
-                                let obj = jQuery.parseJSON(result);
-                                if (obj.code === 200) {
-                                    swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success").then(() => {
-                                        window.location.reload();
-                                    });
-                                } else {
-                                    swal(obj.msg);
-                                }
-                            });
-                        }).catch(function (e) {
-                            swal("Password Error");
-                        });
-
-
-                    }
-                );
-            });
-
-
-    }
-
-
-    String.prototype.endWith = function (endStr) {
-        var d = this.length - endStr.length;
-        return (d >= 0 && this.lastIndexOf(endStr) == d)
-    };
-
-    async function keyStoreToSecretKey(password) {
-        const Keystore = JSON.parse(localStorage.getItem("sign"));
-        return Ae.Keystore.recover(password, Keystore).then(strhex => {
-            return strhex;
-        });
-    }
-
-</script>
 
 </html>

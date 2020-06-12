@@ -62,6 +62,51 @@ func (c *BaseController) getNameInfo(name string) (NameInfo, bool) {
 	return nameInfo, false
 }
 
+
+
+func UpdateName(signingKey string, name string) ([]byte, bool) {
+	resp, err := http.PostForm("https://aeasy.io/api/names/update",
+		url.Values{
+			"app_id":     {beego.AppConfig.String("AEASY::appId")},
+			"signingKey": {signingKey},
+			"name":       {name},
+		})
+	if err != nil {
+		return nil, true
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, true
+	}
+	return body, false
+}
+
+func  GetNameInfo(name string) (NameInfo, bool) {
+	resp, err := http.PostForm("https://aeasy.io/api/names/info",
+		url.Values{
+			"app_id": {beego.AppConfig.String("AEASY::appId")},
+			"name":   {name},
+		})
+	if err != nil {
+		return NameInfo{}, true
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return NameInfo{}, true
+	}
+	var nameInfo NameInfo
+	err = json.Unmarshal([]byte(string(body)), &nameInfo)
+	if err != nil {
+		return NameInfo{}, true
+	}
+	if nameInfo.Code != 200 {
+		return NameInfo{}, true
+	}
+	return nameInfo, false
+}
+
 type NameBase struct {
 	Code int64        `json:"code"`
 	Data NameBaseData `json:"data"`
@@ -107,7 +152,7 @@ func (c *AuctionController) getAuctionName(page string) (Name, bool) {
 	return name, false
 }
 
-func (c *AuctionMyController) getAuctionMyName(page string, address string) (Name, bool) {
+func (c *BaseController) getAuctionMyName(page string, address string) (Name, bool) {
 	resp, err := http.PostForm("https://aeasy.io/api/names/my/over",
 		url.Values{
 			"app_id":  {beego.AppConfig.String("AEASY::appId")},
