@@ -307,8 +307,6 @@ func (c *ApiTransferAddController) Post() {
 	c.SuccessJson(nameTransfer.Data.Hash)
 }
 
-
-
 func (c *ApiUserInfoController) Post() {
 	signingKey := c.GetString("signingKey")
 	resp, err := http.PostForm("https://aeasy.io/api/user/info",

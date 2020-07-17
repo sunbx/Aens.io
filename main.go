@@ -37,22 +37,28 @@ func init() {
 }
 
 func main() {
-	task()
+	taskBase()
+	taskName()
+
 	beego.Run()
-	task()
+
+	taskBase()
+	taskName()
 }
 
-var isTask = true
+var isTaskBase = true
 
-func task() {
+var isTaskNameUpdate = true
+
+func taskBase() {
 	tk := toolbox.NewTask("myTaskName", "0/120 * * * * *", func() error {
-		if (isTask) {
-			isTask = false
+		if isTaskBase {
+			isTaskBase = false
 			TaskInsStatus()
 			TaskOutStatus()
 			TaskMarketStatus()
-			TaskNameUpdate()
-			isTask = true
+
+			isTaskBase = true
 		} else {
 		}
 
@@ -61,7 +67,24 @@ func task() {
 
 	toolbox.AddTask("myTaskName", tk)
 	toolbox.StartTask()
-	fmt.Println("定时任务开启")
+	fmt.Println("Base定时任务开启")
+
+}
+func taskName() {
+	//每十分钟执行一次
+	tk := toolbox.NewTask("myTaskNameUpdate", "0 */30 * * * *", func() error {
+		if isTaskNameUpdate {
+			isTaskNameUpdate = false
+			TaskNameUpdate()
+			isTaskNameUpdate = true
+		} else {
+		}
+		return nil
+	})
+
+	toolbox.AddTask("myTaskNameUpdate", tk)
+	toolbox.StartTask()
+	fmt.Println("Name Update定时任务开启")
 
 }
 
@@ -77,7 +100,8 @@ func TaskNameUpdate() {
 		if b {
 			continue
 		}
-		if info.Data.OverHeight-info.Data.CurrentHeight < 50000-20*24*10 {
+		//一天同步一次
+		if info.Data.OverHeight-info.Data.CurrentHeight < 50000-20*24*1 {
 			fmt.Println("info.Data.OverHeight - info.Data.CurrentHeight ", info.Data.OverHeight-info.Data.CurrentHeight)
 			aensSigningKey := beego.AppConfig.String("names::signingKey")
 			controllers.UpdateName(aensSigningKey, info.Data.Name)

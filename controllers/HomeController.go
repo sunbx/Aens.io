@@ -268,7 +268,6 @@ func (c *DetailAddressController) Get() {
 			name.Data[i].Gains = utils.Decimal((cPrice - price) / price * 100)
 		}
 
-
 		c.Data["name"] = name.Data
 		c.Data["pageLeftDisplay"] = "display: block"
 		c.Data["pageRightDisplay"] = "display: block"

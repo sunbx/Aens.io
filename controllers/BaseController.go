@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/cache"
-	"time"
 	"github.com/beego/i18n"
+	"time"
 )
 
 type BaseController struct {
@@ -55,4 +55,3 @@ func (c *BaseController) ErrorJson(code int, msg string, data interface{}) {
 
 	c.Ctx.WriteString(string(jsons))
 }
-
