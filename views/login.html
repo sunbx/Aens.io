@@ -83,6 +83,7 @@
 <!-- endinject -->
 <script src="../static/js/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="../static/js/sweetalert.min.js"></script>
+<script type="text/javascript" src="../static/js/ae-sdk.js"></script>
 <script type="text/javascript" src="https://wetrue.io/assets/scripts/aepp-sdk.browser-script-721.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
 
@@ -104,24 +105,32 @@
             background: "",
             imageColor: "#FFFFFF"
         });
-        $.post("/api/login", {mnemonic: mnemonic, index: indexSelectValue}, function (result) {
+
+
+        const publicKeyInsecretKey = Ae.HdWallet.getHdWalletAccountFromMnemonic(mnemonic, indexSelectValue-1);
+        const publicKey = publicKeyInsecretKey.publicKey;
+        const secretKey = publicKeyInsecretKey.secretKey;
+
+
+        $.post("/api/login", {address: publicKey}, function (result) {
             $("#login").text("SIGN IN");
             $("#login").LoadingOverlay("hide");
             let obj = jQuery.parseJSON(result);
             if (obj.code === 200) {
+
                 swal({{i18n .Lang "Please set your temporary password"}}, {
                     content: "input",
                 }).then((password) => {
-                    wordKeyToIsKs(password, obj.data.signingKey);
+                    localStorage.setItem("publicKey", publicKey);
+                    wordKeyToIsKs(password, secretKey);
                     window.location.href = "/";
                 });
+
             } else {
                 swal(obj.msg);
             }
         });
     });
-
-
 
 
     function wordKeyToIsKs(password, secretKey) {

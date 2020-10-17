@@ -38,30 +38,10 @@ func init() {
 
 	beego.Router("/otc/market", &controllers.OTCMarketController{})
 
-	//接口
-	//aeasy login
-	beego.Router("/api/login", &controllers.ApiLoginController{})
-
-	//aeasy register
-	beego.Router("/api/register", &controllers.ApiRegisterController{})
-
-	//ApiNamesPriceController
-	beego.Router("/api/name/add", &controllers.ApiNamesAddController{})
-
-	//ApiNamesUpdateController
-	beego.Router("/api/name/update", &controllers.ApiNamesUpdateController{})
-
-	//ApiNamesPriceController
 	beego.Router("/api/name/info", &controllers.ApiNamesInfoController{})
 
-	//ApiTransferAddController
-	beego.Router("/api/name/transfer", &controllers.ApiTransferAddController{})
-
-	//ApiNamesPriceController
 	beego.Router("/api/user/info", &controllers.ApiUserInfoController{})
 
-	//market
-	//ApiNamesPriceController
 	beego.Router("/api/otc/market/in", &controllers.MarketInController{})
 
 	beego.Router("/api/otc/market/cancel", &controllers.MarketCancelController{})

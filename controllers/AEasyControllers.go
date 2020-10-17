@@ -1,13 +1,10 @@
 package controllers
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/astaxie/beego"
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"strings"
 )
 
 type ApiLoginController struct {
@@ -68,36 +65,9 @@ type LoginData struct {
 }
 
 func (c *ApiLoginController) Post() {
-	mnemonic := c.GetString("mnemonic")
-	mnemonic = strings.Trim(mnemonic, " ")
-	mnemonic = strings.Replace(mnemonic, "\n", "", -1)
-	index := c.GetString("index")
-	resp, err := http.PostForm("https://aeasy.io/api/user/login",
-		url.Values{
-			"app_id":        {beego.AppConfig.String("AEASY::appId")},
-			"mnemonic":      {mnemonic},
-			"index_address": {index},
-		})
-	if err != nil {
-		c.ErrorJson(-500, err.Error(), JsonData{})
-		return
-	}
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		c.ErrorJson(-500, err.Error(), JsonData{})
-		return
-	}
-	fmt.Println(string(body))
-	var login Login
-	err = json.Unmarshal([]byte(string(body)), &login)
-
-	if err != nil {
-		c.ErrorJson(-100, err.Error(), JsonData{})
-		return
-	}
-	c.Ctx.SetCookie("address", login.Data.Address)
-	c.Ctx.WriteString(string(body))
+	address := c.GetString("address")
+	c.Ctx.SetCookie("address", address)
+	c.SuccessJson(map[string]interface{}{})
 }
 
 func (c *ApiRegisterController) Post() {

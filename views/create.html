@@ -79,13 +79,13 @@
                 <span></span>
             </li>
             <li class="nav-item">
-                <a class="nav-link"  rel="noopener noreferrer" href="/otc/hosting">
+                <a class="nav-link" rel="noopener noreferrer" href="/otc/hosting">
                     <i class="mdi mdi-directions-fork menu-icon"></i>
                     <span class="menu-title">{{i18n .Lang "My hosting"}}</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link"  rel="noopener noreferrer" href="/otc/market">
+                <a class="nav-link" rel="noopener noreferrer" href="/otc/market">
                     <i class="mdi mdi-code-equal menu-icon"></i>
                     <span class="menu-title">{{i18n .Lang "Name Market"}}</span>
                 </a>
@@ -95,7 +95,7 @@
                 <span></span>
             </li>
             <li class="nav-item">
-                <a class="nav-link"  href="/language">
+                <a class="nav-link" href="/language">
                     <i class="mdi mdi-stack-exchange menu-icon"></i>
                     <span class="menu-title">{{i18n .Lang "language"}}</span>
                 </a>
@@ -278,6 +278,7 @@
 </script>
 
 <script type="text/javascript" src="../static/js/sweetalert.min.js"></script>
+<script type="text/javascript" src="../static/js/ae-sdk.js"></script>
 <script type="text/javascript" src="https://wetrue.io/assets/scripts/aepp-sdk.browser-script-721.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
 
@@ -322,7 +323,7 @@
                 }
                 swal({
                     title: {{i18n .Lang "Are you sure?"}},
-                    text: {{i18n .Lang "Currently the domain name has been registered are you willing to pay"}} +FloatAdd(obj.data.current_price, obj.data.current_price * 0.05) + {{i18n .Lang "ae for bidding?!"}},
+                    text: {{i18n .Lang "Currently the domain name has been registered are you willing to pay"}} +FloatAdd(obj.data.current_price, obj.data.current_price * 0.1) + {{i18n .Lang "ae for bidding?!"}},
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,
@@ -334,25 +335,59 @@
                             }).then((password) => {
                                 let key = keyStoreToSecretKey(password);
                                 key.then(function (signingKey) {
-                                    $("#claim").text(" ");
-                                    $("#claim").LoadingOverlay("show", {
-                                        background: "",
-                                        imageColor: "#FFFFFF"
+                                    var storage = window.localStorage;
+                                    var publicKey = storage["publicKey"];
+
+                                    Ae.Node({url: 'http://localhost:3013'}).then(node => {
+                                        Ae.Universal({
+                                            nodes: [{name: 'local', instance: node}],
+                                            accounts: [
+                                                Ae.MemoryAccount({
+                                                    keypair: {
+                                                        secretKey: signingKey,
+                                                        publicKey: publicKey
+                                                    }
+                                                }),
+                                            ],
+                                            address: publicKey,
+                                        }).then(aeInstance => {
+                                            $("#claim").text(" ");
+                                            $("#claim").LoadingOverlay("show", {
+                                                background: "",
+                                                imageColor: "#FFFFFF"
+                                            });
+                                            aeInstance.aensPreclaim(name).then(function (preclaim) {
+                                                console.log("AE Preclaim:" + preclaim.salt);
+                                                console.log("AE Preclaim:" + preclaim.hash);
+
+                                                const nameFee = (obj.data.current_price * 1000000000000000000) + (obj.data.current_price * 1000000000000000000*0.1);
+                                                // console.log("AE Claim startFee:" + startFee);
+                                                console.log("AE Claim nameFee:" + nameFee);
+                                                aeInstance.aensBid(name, nameFee, {waitMined: false}).then(function (bid) {
+                                                    console.log("AE bid hash:" + bid.hash);
+                                                    $("#claim").text("CLAIM");
+                                                    $("#claim").LoadingOverlay("hide");
+                                                    swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
+                                                    $("#name").val("");
+
+                                                }).catch(function (e) {
+                                                    console.log("AE Claim hash:" + claim.hash);
+                                                    console.log("AE Claim nameFee:" + claim.nameFee);
+
+
+                                                    console.log("AE bid :" + e);
+                                                });
+
+
+                                            }).catch(function (e) {
+                                                console.log("AE Preclaim :" + e);
+                                                $("#claim").text("CLAIM");
+                                                $("#claim").LoadingOverlay("hide");
+                                            })
+                                        })
                                     });
-                                    $.post("/api/name/add", {
-                                        name: name,
-                                        signingKey: signingKey,
-                                    }, function (result) {
-                                        $("#claim").text("CLAIM");
-                                        $("#claim").LoadingOverlay("hide");
-                                        let obj = jQuery.parseJSON(result);
-                                        if (obj.code === 200) {
-                                            swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
-                                            $("#name").val("")
-                                        } else {
-                                            swal(obj.msg);
-                                        }
-                                    });
+
+
                                 }).catch(function (e) {
                                     swal("Password Error");
                                 });
@@ -379,25 +414,57 @@
                                 let key = keyStoreToSecretKey(password);
 
                                 key.then(function (signingKey) {
-                                    $("#claim").text(" ");
-                                    $("#claim").LoadingOverlay("show", {
-                                        background: "",
-                                        imageColor: "#FFFFFF"
+
+
+                                    var storage = window.localStorage;
+                                    var publicKey = storage["publicKey"];
+
+                                    Ae.Node({url: 'http://localhost:3013'}).then(node => {
+                                        Ae.Universal({
+                                            nodes: [{name: 'local', instance: node}],
+                                            accounts: [
+                                                Ae.MemoryAccount({
+                                                    keypair: {
+                                                        secretKey: signingKey,
+                                                        publicKey: publicKey
+                                                    }
+                                                }),
+                                            ],
+                                            address: publicKey,
+                                        }).then(aeInstance => {
+                                            $("#claim").text(" ");
+                                            $("#claim").LoadingOverlay("show", {
+                                                background: "",
+                                                imageColor: "#FFFFFF"
+                                            });
+                                            aeInstance.aensPreclaim(name).then(function (preclaim) {
+                                                console.log("AE Preclaim:" + preclaim.salt);
+                                                console.log("AE Preclaim:" + preclaim.hash);
+
+
+                                                aeInstance.aensClaim(name, preclaim.salt, {waitMined: false}).then(function (claim) {
+                                                    console.log("AE Claim hash:" + claim.hash);
+                                                    console.log("AE Claim nameFee:" + claim.nameFee);
+
+
+                                                    $("#claim").text("CLAIM");
+                                                    $("#claim").LoadingOverlay("hide");
+                                                    swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
+                                                    $("#name").val("")
+
+                                                }).catch(function (e) {
+                                                    console.log("AE Claim :" + e);
+                                                    $("#claim").text("CLAIM");
+                                                    $("#claim").LoadingOverlay("hide");
+                                                })
+                                            }).catch(function (e) {
+                                                console.log("AE Preclaim :" + e);
+                                                $("#claim").text("CLAIM");
+                                                $("#claim").LoadingOverlay("hide");
+                                            })
+                                        })
                                     });
-                                    $.post("/api/name/add", {
-                                        name: name,
-                                        signingKey: signingKey,
-                                    }, function (result) {
-                                        $("#claim").text({{i18n .Lang "CLAIM"}});
-                                        $("#claim").LoadingOverlay("hide");
-                                        let obj = jQuery.parseJSON(result);
-                                        if (obj.code === 200) {
-                                            swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
-                                            $("#name").val("")
-                                        } else {
-                                            swal(obj.msg);
-                                        }
-                                    });
+
                                 }).catch(function (e) {
                                     swal("Password Error");
                                 });

@@ -79,13 +79,13 @@
                 <span></span>
             </li>
             <li class="nav-item">
-                <a class="nav-link"  rel="noopener noreferrer" href="/otc/hosting">
+                <a class="nav-link" rel="noopener noreferrer" href="/otc/hosting">
                     <i class="mdi mdi-directions-fork menu-icon"></i>
                     <span class="menu-title">{{i18n .Lang "My hosting"}}</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link"  rel="noopener noreferrer" href="/otc/market">
+                <a class="nav-link" rel="noopener noreferrer" href="/otc/market">
                     <i class="mdi mdi-code-equal menu-icon"></i>
                     <span class="menu-title">{{i18n .Lang "Name Market"}}</span>
                 </a>
@@ -95,7 +95,7 @@
                 <span></span>
             </li>
             <li class="nav-item">
-                <a class="nav-link"  href="/language">
+                <a class="nav-link" href="/language">
                     <i class="mdi mdi-stack-exchange menu-icon"></i>
                     <span class="menu-title">{{i18n .Lang "language"}}</span>
                 </a>
@@ -367,8 +367,6 @@
 
 
     $("#update").click(function () {
-
-
         swal({{i18n .Lang "Enter your temporary password"}}, {
             content: "input",
         }).then((password) => {
@@ -379,23 +377,48 @@
                     background: "",
                     imageColor: "#FFFFFF"
                 });
-                $.post("/api/name/update", {name: {{.nameInfo.Name}}, signingKey: signingKey}, function (result) {
-                    $("#update").text({{i18n .Lang "UPDATE"}});
-                    $("#update").LoadingOverlay("hide");
-                    let obj = jQuery.parseJSON(result);
-                    if (obj.code === 200) {
-                        swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
-                    } else {
-                        swal(obj.msg);
-                    }
+
+                var storage = window.localStorage;
+                var publicKey = storage["publicKey"];
+
+
+                Ae.Node({url: 'http://localhost:3013'}).then(node => {
+                    Ae.Universal({
+                        nodes: [{name: 'local', instance: node}],
+                        accounts: [
+                            Ae.MemoryAccount({
+                                keypair: {
+                                    secretKey: signingKey,
+                                    publicKey: publicKey
+                                }
+                            }),
+                        ],
+                        address: publicKey,
+                    }).then(aeInstance => {
+                        const pointersArray = [publicKey];
+                        aeInstance.aensUpdate({{.nameInfo.Name}}, pointersArray, {
+                            extendPointers: true,
+                            waitMined: false
+                        }).then(function (update) {
+                            $("#update").text({{i18n .Lang "UPDATE"}});
+                            $("#update").LoadingOverlay("hide");
+                            console.log("AE hash:" + update.hash);
+                            swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
+                        }).catch(function (e) {
+                            $("#update").text({{i18n .Lang "UPDATE"}});
+                            $("#update").LoadingOverlay("hide");
+                            console.log("AE update :" + e.toString());
+                            swal(e.toString());
+                        })
+                    })
                 });
+
+
             }).catch(function (e) {
                 swal("Password Error");
             });
 
         });
-
-
     });
 
     $("#transfer").click(function () {
@@ -409,25 +432,41 @@
                     let key = keyStoreToSecretKey(password);
 
                     key.then(function (signingKey) {
+
                         $("#transfer").text(" ");
                         $("#transfer").LoadingOverlay("show", {
                             background: "",
                             imageColor: "#FFFFFF"
                         });
-                        $.post("/api/name/transfer", {
-                            name: {{.nameInfo.Name}},
-                            signingKey: signingKey,
-                            recipientAddress: recipientAddress
-                        }, function (result) {
-                            $("#transfer").text("TRANSFER");
-                            $("#transfer").LoadingOverlay("hide");
-                            let obj = jQuery.parseJSON(result);
-                            if (obj.code === 200) {
-                                swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
-                            } else {
-                                swal(obj.msg);
-                            }
+                        var storage = window.localStorage;
+                        var publicKey = storage["publicKey"];
+                        Ae.Node({url: 'http://localhost:3013'}).then(node => {
+                            Ae.Universal({
+                                nodes: [{name: 'local', instance: node}],
+                                accounts: [
+                                    Ae.MemoryAccount({
+                                        keypair: {
+                                            secretKey: signingKey,
+                                            publicKey: publicKey
+                                        }
+                                    }),
+                                ],
+                                address: publicKey,
+                            }).then(aeInstance => {
+                                aeInstance.aensTransfer({{.nameInfo.Name}}, recipientAddress,{ extendPointers: true ,waitMined: false}).then(function (transfer) {
+                                    $("#transfer").text("TRANSFER");
+                                    $("#transfer").LoadingOverlay("hide");
+                                    console.log("AE hash:" + transfer.hash);
+                                    swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
+                                }).catch(function (e) {
+                                    $("#transfer").text("TRANSFER");
+                                    $("#transfer").LoadingOverlay("hide");
+                                    console.log("AE update :" + e.toString());
+                                    swal(e.toString());
+                                })
+                            })
                         });
+
                     }).catch(function (e) {
                         swal("Password Error");
                     });
@@ -440,49 +479,181 @@
 
 
     $("#claim").click(function () {
-        let nameFee = $("#namefee").text();
-        nameFee = FloatAdd(nameFee, nameFee * 0.05);
-        swal({
-            title: {{i18n .Lang "Are you sure"}}+"?",
-            text: {{i18n .Lang "Are you sure about a markup of"}}+nameFee + {{i18n .Lang "of the current price"}}+" ?!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then((willDelete) => {
-                if (willDelete) {
 
-                    swal({{i18n .Lang "Enter your temporary password"}}, {
-                        content: "input",
-                    }).then((password) => {
-                        let key = keyStoreToSecretKey(password);
-                        key.then(function (signingKey) {
-                            $("#claim").text(" ");
-                            $("#claim").LoadingOverlay("show", {
-                                background: "",
-                                imageColor: "#FFFFFF"
+
+        let name = {{.nameInfo.Name}};
+        $("#claim").text(" ");
+        $("#claim").LoadingOverlay("show", {
+            background: "",
+            imageColor: "#FFFFFF"
+        });
+        $.post("/api/name/info", {
+            name: name,
+        }, function (result) {
+            $("#claim").text({{i18n .Lang "CLAIM"}});
+            $("#claim").LoadingOverlay("hide");
+            let obj = jQuery.parseJSON(result);
+            if (obj.code === 200) {
+                if (obj.data.current_height > obj.data.end_height) {
+                    swal({{i18n .Lang "The domain name has been registered, please select another domain name"}});
+                    return;
+                }
+                swal({
+                    title: {{i18n .Lang "Are you sure?"}},
+                    text: {{i18n .Lang "Currently the domain name has been registered are you willing to pay"}} +FloatAdd(obj.data.current_price, obj.data.current_price * 0.1) + {{i18n .Lang "ae for bidding?!"}},
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            swal({{i18n .Lang "Enter your temporary password"}}, {
+                                content: "input",
+                            }).then((password) => {
+                                let key = keyStoreToSecretKey(password);
+                                key.then(function (signingKey) {
+                                    var storage = window.localStorage;
+                                    var publicKey = storage["publicKey"];
+
+                                    Ae.Node({url: 'http://localhost:3013'}).then(node => {
+                                        Ae.Universal({
+                                            nodes: [{name: 'local', instance: node}],
+                                            accounts: [
+                                                Ae.MemoryAccount({
+                                                    keypair: {
+                                                        secretKey: signingKey,
+                                                        publicKey: publicKey
+                                                    }
+                                                }),
+                                            ],
+                                            address: publicKey,
+                                        }).then(aeInstance => {
+                                            $("#claim").text(" ");
+                                            $("#claim").LoadingOverlay("show", {
+                                                background: "",
+                                                imageColor: "#FFFFFF"
+                                            });
+                                            aeInstance.aensPreclaim(name).then(function (preclaim) {
+                                                console.log("AE Preclaim:" + preclaim.salt);
+                                                console.log("AE Preclaim:" + preclaim.hash);
+
+                                                const nameFee = (obj.data.current_price * 1000000000000000000) + (obj.data.current_price * 1000000000000000000 * 0.1);
+                                                // console.log("AE Claim startFee:" + startFee);
+                                                console.log("AE Claim nameFee:" + nameFee);
+                                                aeInstance.aensBid(name, nameFee, {waitMined: false}).then(function (bid) {
+                                                    console.log("AE bid hash:" + bid.hash);
+                                                    $("#claim").text("CLAIM");
+                                                    $("#claim").LoadingOverlay("hide");
+                                                    swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
+                                                    $("#name").val("");
+
+                                                }).catch(function (e) {
+                                                    console.log("AE Claim hash:" + claim.hash);
+                                                    console.log("AE Claim nameFee:" + claim.nameFee);
+
+
+                                                    console.log("AE bid :" + e);
+                                                });
+
+
+                                            }).catch(function (e) {
+                                                console.log("AE Preclaim :" + e);
+                                                $("#claim").text("CLAIM");
+                                                $("#claim").LoadingOverlay("hide");
+                                            })
+                                        })
+                                    });
+
+
+                                }).catch(function (e) {
+                                    swal("Password Error");
+                                });
                             });
-                            $.post("/api/name/add", {
-                                name: {{.nameInfo.Name}},
-                                signingKey: signingKey,
-                            }, function (result) {
-                                $("#claim").text({{i18n .Lang "CLAIM"}});
-                                $("#claim").LoadingOverlay("hide");
-                                let obj = jQuery.parseJSON(result);
-                                if (obj.code === 200) {
-                                    swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
-                                } else {
-                                    swal(obj.msg);
-                                }
-                            });
-                        }).catch(function (e) {
-                            swal("Password Error");
-                        });
+
+                        } else {
+                        }
                     });
 
-                } else {
-                }
-            });
+
+            } else {
+                swal({
+                    title: {{i18n .Lang "Are you sure?"}},
+                    text: {{i18n .Lang "Do you want to register  the domain name?!"}},
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            swal({{i18n .Lang "Enter your temporary password"}}, {
+                                content: "input",
+                            }).then((password) => {
+                                let key = keyStoreToSecretKey(password);
+
+                                key.then(function (signingKey) {
+
+
+                                    var storage = window.localStorage;
+                                    var publicKey = storage["publicKey"];
+
+                                    Ae.Node({url: 'http://localhost:3013'}).then(node => {
+                                        Ae.Universal({
+                                            nodes: [{name: 'local', instance: node}],
+                                            accounts: [
+                                                Ae.MemoryAccount({
+                                                    keypair: {
+                                                        secretKey: signingKey,
+                                                        publicKey: publicKey
+                                                    }
+                                                }),
+                                            ],
+                                            address: publicKey,
+                                        }).then(aeInstance => {
+                                            $("#claim").text(" ");
+                                            $("#claim").LoadingOverlay("show", {
+                                                background: "",
+                                                imageColor: "#FFFFFF"
+                                            });
+                                            aeInstance.aensPreclaim(name).then(function (preclaim) {
+                                                console.log("AE Preclaim:" + preclaim.salt);
+                                                console.log("AE Preclaim:" + preclaim.hash);
+
+
+                                                aeInstance.aensClaim(name, preclaim.salt, {waitMined: false}).then(function (claim) {
+                                                    console.log("AE Claim hash:" + claim.hash);
+                                                    console.log("AE Claim nameFee:" + claim.nameFee);
+
+
+                                                    $("#claim").text("CLAIM");
+                                                    $("#claim").LoadingOverlay("hide");
+                                                    swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
+                                                    $("#name").val("")
+
+                                                }).catch(function (e) {
+                                                    console.log("AE Claim :" + e);
+                                                    $("#claim").text("CLAIM");
+                                                    $("#claim").LoadingOverlay("hide");
+                                                })
+                                            }).catch(function (e) {
+                                                console.log("AE Preclaim :" + e);
+                                                $("#claim").text("CLAIM");
+                                                $("#claim").LoadingOverlay("hide");
+                                            })
+                                        })
+                                    });
+
+                                }).catch(function (e) {
+                                    swal("Password Error");
+                                });
+                            });
+
+                        } else {
+                        }
+                    });
+
+            }
+
+        });
 
 
     });
