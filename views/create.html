@@ -278,8 +278,8 @@
 </script>
 
 <script type="text/javascript" src="../static/js/sweetalert.min.js"></script>
-<script type="text/javascript" src="../static/js/ae-sdk.js"></script>
-<script type="text/javascript" src="https://wetrue.io/assets/scripts/aepp-sdk.browser-script-721.js"></script>
+<script type="text/javascript" src="https://unpkg.com/@aeternity/aepp-sdk@7.7.0/dist/aepp-sdk.browser-script.js"></script>
+<script type="text/javascript" src="https://unpkg.com/@aeternity/aepp-sdk@7.7.0/dist/aepp-sdk.browser-script.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
 
 </body>
@@ -338,7 +338,7 @@
                                     var storage = window.localStorage;
                                     var publicKey = storage["publicKey"];
 
-                                    Ae.Node({url: 'http://localhost:3013'}).then(node => {
+                                    Ae.Node({url: 'https://node.aeasy.io'}).then(node => {
                                         Ae.Universal({
                                             nodes: [{name: 'local', instance: node}],
                                             accounts: [
@@ -357,34 +357,28 @@
                                                 imageColor: "#FFFFFF"
                                             });
                                             aeInstance.aensPreclaim(name).then(function (preclaim) {
-                                                console.log("AE Preclaim:" + preclaim.salt);
-                                                console.log("AE Preclaim:" + preclaim.hash);
 
                                                 const nameFee = (obj.data.current_price * 1000000000000000000) + (obj.data.current_price * 1000000000000000000*0.1);
                                                 // console.log("AE Claim startFee:" + startFee);
-                                                console.log("AE Claim nameFee:" + nameFee);
                                                 aeInstance.aensBid(name, nameFee, {waitMined: false}).then(function (bid) {
-                                                    console.log("AE bid hash:" + bid.hash);
                                                     $("#claim").text("CLAIM");
                                                     $("#claim").LoadingOverlay("hide");
                                                     swal({{i18n .Lang "Broadcast Sucess"}}+"!", {{i18n .Lang "please refresh after 5 minutes"}}+"!", "success");
                                                     $("#name").val("");
 
                                                 }).catch(function (e) {
-                                                    console.log("AE Claim hash:" + claim.hash);
-                                                    console.log("AE Claim nameFee:" + claim.nameFee);
-
-
-                                                    console.log("AE bid :" + e);
+                                                    swal(e.toString())
                                                 });
 
 
                                             }).catch(function (e) {
-                                                console.log("AE Preclaim :" + e);
+                                                swal(e.toString())
                                                 $("#claim").text("CLAIM");
                                                 $("#claim").LoadingOverlay("hide");
                                             })
-                                        })
+                                        }).catch(function (e) {
+                                            swal(e.toString())
+                                        });
                                     });
 
 
@@ -419,7 +413,7 @@
                                     var storage = window.localStorage;
                                     var publicKey = storage["publicKey"];
 
-                                    Ae.Node({url: 'http://localhost:3013'}).then(node => {
+                                    Ae.Node({url: 'https://node.aeasy.io'}).then(node => {
                                         Ae.Universal({
                                             nodes: [{name: 'local', instance: node}],
                                             accounts: [
@@ -438,13 +432,8 @@
                                                 imageColor: "#FFFFFF"
                                             });
                                             aeInstance.aensPreclaim(name).then(function (preclaim) {
-                                                console.log("AE Preclaim:" + preclaim.salt);
-                                                console.log("AE Preclaim:" + preclaim.hash);
-
 
                                                 aeInstance.aensClaim(name, preclaim.salt, {waitMined: false}).then(function (claim) {
-                                                    console.log("AE Claim hash:" + claim.hash);
-                                                    console.log("AE Claim nameFee:" + claim.nameFee);
 
 
                                                     $("#claim").text("CLAIM");
@@ -453,16 +442,18 @@
                                                     $("#name").val("")
 
                                                 }).catch(function (e) {
-                                                    console.log("AE Claim :" + e);
+                                                    swal(e.toString())
                                                     $("#claim").text("CLAIM");
                                                     $("#claim").LoadingOverlay("hide");
                                                 })
                                             }).catch(function (e) {
-                                                console.log("AE Preclaim :" + e);
+                                                swal(e.toString())
                                                 $("#claim").text("CLAIM");
                                                 $("#claim").LoadingOverlay("hide");
                                             })
-                                        })
+                                        }).catch(function (e) {
+                                            swal(e.toString());
+                                        });
                                     });
 
                                 }).catch(function (e) {
