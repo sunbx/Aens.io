@@ -2,7 +2,8 @@
 > Aens.io It is a one-stop service system for viewing and browsing domain names, registering domain names and updating otc domain names. All codes are open source and can be safely used. Relying on aeasy-io framework, it is a decentralized management system that will not save any user's private key and other information.
 Here's how to use it (take domain name registration as an example)
 
- 
+> Sponsors Æternity Crypto Foundation
+
 Visit https://aens.io to enter
 
 ![](https://www.showdoc.cc/server/api/common/visitfile/sign/c9b3933a7a03aea2c519ecf888afa7e0?showdoc=.jpg)
